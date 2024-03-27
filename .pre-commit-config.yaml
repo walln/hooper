@@ -8,10 +8,11 @@ repos:
     hooks:
       - id: test
         name: test
-        entry: poetry run pytest
+        entry: ./scripts/pytest.sh
         language: system
         types: [python]
         pass_filenames: false
+        exit_codes: [0, 5]
       - id: commit-msg
         name: conventional-commit-messages
         language: pygrep

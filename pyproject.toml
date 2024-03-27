@@ -22,3 +22,7 @@ virtual = true
 
 [tool.rye.workspace]
 members = ["backend"]
+
+
+# [tool.pytest.ini_options]
+# addopts = "--exit-code=0,5"
