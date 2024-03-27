@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: "v0.1.7"
+    hooks:
+      - id: ruff
+      - id: ruff-format
+  - repo: local
+    hooks:
+      - id: test
+        name: test
+        entry: poetry run pytest
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: commit-msg
+        name: conventional-commit-messages
+        language: pygrep
+        entry: "^(chore|test|feat|fix|build|docs|refactor)!?:.*$"
+        args: [--multiline, --negate] # fails if the entry is NOT matched
+        stages: [commit-msg]
