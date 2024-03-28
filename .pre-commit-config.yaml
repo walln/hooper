@@ -1,11 +1,18 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.1.7"
-    hooks:
-      - id: ruff
-      - id: ruff-format
   - repo: local
     hooks:
+      - id: lint
+        name: lint
+        entry: ./scripts/lint.sh
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: format
+        name: format
+        entry: ./scripts/format.sh
+        language: system
+        types: [python]
+        pass_filenames: false
       - id: test
         name: test
         entry: ./scripts/pytest.sh

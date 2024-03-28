@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rye test -a
+rye test --all
 exit_code=$?
 
 if [ $exit_code -eq 0 ] || [ $exit_code -eq 5 ]; then
