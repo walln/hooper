@@ -7,9 +7,15 @@ authors = [
 ]
 dependencies = [
     "modal>=0.62.4",
-    "torch>=2.2.1",
+    "torch>=2.1.2",
     "bitsandbytes>=0.43.0",
     "transformers>=4.39.1",
+    "polars>=0.20.17",
+    "langchain>=0.1.13",
+    "pydantic>=2.6.4",
+    "fastapi>=0.110.0",
+    "vllm>=0.3.3",
+    "openai>=1.14.3",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -27,3 +33,6 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/backend"]
+
+[tool.rye.scripts]
+functions = { cmd = "python src/backend/functions.py"}
