@@ -2,12 +2,12 @@
 
 from typing import AsyncGenerator, Union
 
-from modal import enter, method
+from modal import Stub, enter, exit, method
 from vllm import AsyncEngineArgs, AsyncLLMEngine
 from vllm.utils import random_uuid
 
 from backend.vllm_server.engine.chat import ChatEngine
-from backend.vllm_server.infra import BASE_MODEL, GPU_CONFIG, MODEL_DIR, stub
+from backend.vllm_server.infra import BASE_MODEL, GPU_CONFIG, MODEL_DIR, image
 from backend.vllm_server.logger import init_logger
 from backend.vllm_server.schema.chat import (
     ChatCompletionRequest,
@@ -17,6 +17,8 @@ from backend.vllm_server.schema.common import ErrorResponse
 from backend.vllm_server.utils import create_chat_template, create_error_response
 
 logger = init_logger(__name__)
+
+stub = Stub("vLLM-OpenAI-server", image=image)
 
 
 @stub.cls(gpu=GPU_CONFIG, allow_concurrent_inputs=12, container_idle_timeout=300)
@@ -41,8 +43,8 @@ class Model:
             model=MODEL_DIR,
             tensor_parallel_size=GPU_CONFIG.count,
             gpu_memory_utilization=0.9,
-            # capture the graph for faster inference, but slower cold starts
-            enforce_eager=False,
+            # do not capture the graph slower faster inference, but faster cold starts
+            enforce_eager=True,
             # disable logging so we can stream tokens
             disable_log_stats=True,
             disable_log_requests=True,
@@ -54,6 +56,17 @@ class Model:
         self.chat_engine = ChatEngine(
             self.engine, BASE_MODEL, "assistant", chat_template
         )
+
+    @exit()
+    def stop_engine():
+        """Stop the vLLM engine.
+
+        When the container is stopped, this method is called to stop the vLLM engine.
+        """
+        if GPU_CONFIG.count > 1:
+            import ray
+
+            ray.shutdown()
 
     @method()
     async def check_health(self):

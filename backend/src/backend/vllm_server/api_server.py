@@ -8,8 +8,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse, Response
 from modal import asgi_app
 
-from backend.vllm_server.infra import stub
-from backend.vllm_server.model import Model
+from backend.vllm_server.model import Model, stub
 from backend.vllm_server.schema.chat import ChatCompletionRequest
 from backend.vllm_server.utils import create_error_response
 

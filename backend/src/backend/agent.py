@@ -7,6 +7,7 @@ import polars as pl
 from modal import Image, Mount, Stub, enter, gpu, method
 from openai import OpenAI
 
+from backend.functions import TakeAction
 from backend.schema import DescribeDatasetArgs
 from backend.utils import VLLM_API_URL, logger
 from backend.vllm_server.infra import BASE_MODEL
@@ -18,13 +19,21 @@ stub = Stub("hooper-backend")
 image = (
     Image.debian_slim()
     .apt_install("git")
-    .pip_install("wheel", "ninja", "packaging")
-    .pip_install("polars", "langchain", "pydantic>=2.6.4", "fastapi>=0.110.0", "openai")
+    # .pip_install("wheel", "ninja", "packaging")
+    .pip_install(
+        "polars",
+        "langchain",
+        "pydantic>=2.6.4",
+        "fastapi>=0.110.0",
+        "openai",
+        "anthropic",
+        "instructor",
+    )
 )
 
 LOCAL_DATA_PATH = os.path.join(os.getcwd(), "backend/nba_data")
 CACHE_PATH = "/root/model_cache"
-MODEL_NAME = "NousResearch/Hermes-2-Pro-Mistral-7B"
+# MODEL_NAME = "NousResearch/Hermes-2-Pro-Mistral-7B"
 QUESTION = "Who has lead the league is scoring this season?"
 
 
@@ -53,11 +62,14 @@ class Agent:
 
     def create_chat_client(self):
         """Create a chat client for the vLLM server."""
-        client = OpenAI(
+        openai_client = OpenAI(
             base_url=VLLM_API_URL,
             api_key="token-abc123",
         )
 
+        import instructor
+
+        client = instructor.from_openai(openai_client)
         self.client = client
 
     def load_data(self):
@@ -133,10 +145,10 @@ Final Answer: the final answer to the original input question
         print(system)
 
         prompt = [
-            {
-                "role": "system",
-                "content": system,
-            },
+            # {
+            #     "role": "system",
+            #     "content": system,
+            # },
             {
                 "role": "user",
                 "content": f"Question: {query}",
@@ -145,6 +157,7 @@ Final Answer: the final answer to the original input question
 
         completion = self.client.chat.completions.create(
             model=BASE_MODEL,
+            response_model=TakeAction,
             messages=prompt,
             stream=False,
         )
@@ -152,9 +165,18 @@ Final Answer: the final answer to the original input question
         return completion
 
 
+# TODO: Check this out https://github.com/vllm-project/vllm/pull/3237
+# VLLM guided decoding needs this pr to be merged before tool usage is supported
+# could potentially just force a function calling tuned model (Nous/Hermes) to get
+# around this issue but then there are reliability issues and stability issues
+# for now maybe just fall back to an API provider (Anthropic new tools support looks
+# very promising: long context for flattened tools, native CoT tool, etc.)
+
+
 @stub.local_entrypoint()
 def test_agent():
     """Test the agent by prompting it with a question."""
     logger.info("Running test_agent...")
+    QUESTION = "What datasets are available?"
     response = Agent().generate_completion.remote(QUESTION)
     print(f"Response:\n {response}")

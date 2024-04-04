@@ -1,6 +1,7 @@
 """Tools that the Agent can use."""
 
-from langchain_core.utils.function_calling import convert_to_openai_function
+from typing import Union
+
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -8,6 +9,16 @@ class Think(BaseModel):
     """Write down your thoughts or reasoning without taking any external action."""
 
     thoughts: str = Field(description="The thoughts or reasoning to write down.")
+
+
+class ListDatasets(BaseModel):
+    """List the available datasets."""
+
+    league: str = Field(description="The league of the dataset.", default="NBA")
+
+    def process(self):
+        """Process the ListDatasets action."""
+        return self.league
 
 
 class DescribeDataset(BaseModel):
@@ -24,9 +35,11 @@ class DescribeDataset(BaseModel):
         return field
 
 
-tool_schemas = [Think, DescribeDataset]
-tool_schemas_openai = [
-    convert_to_openai_function(tool_schema) for tool_schema in tool_schemas
-]
+class TakeAction(BaseModel):
+    """Take an action."""
 
-print(tool_schemas_openai)
+    action: Union[ListDatasets, DescribeDataset, Think]
+
+    def process(self):
+        """Process the action."""
+        return self.action.process()

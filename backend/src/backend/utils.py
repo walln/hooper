@@ -14,4 +14,4 @@ log_file_path = os.path.join(os.getcwd(), "src/logs")
 
 logger = logging.getLogger("hooper-agent-dev")
 
-VLLM_API_URL = "https://walln-walln--vllm-openai-server-fastapi-app-dev.modal.run/v1"
+VLLM_API_URL = "https://walln-walln--vllm-openai-server-fastapi-app.modal.run/v1"

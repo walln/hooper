@@ -1,6 +1,8 @@
 """Modal infrastructure for the vLLM server."""
 
-from modal import Image, Stub, gpu
+import os
+
+from modal import Image, gpu
 
 MODEL_DIR = "/model"
 BASE_MODEL = "mistralai/Mistral-7B-Instruct-v0.1"
@@ -15,12 +17,16 @@ def download_model_to_folder():
     need to get hit on container initialization.
     """
     from huggingface_hub import snapshot_download
+    from transformers.utils import move_cache
+
+    os.makedirs(MODEL_DIR, exist_ok=True)
 
     snapshot_download(
         BASE_MODEL,
         local_dir=MODEL_DIR,
         ignore_patterns=["*.pt", "*.gguf"],
     )
+    move_cache()
 
 
 image = (
@@ -35,5 +41,3 @@ image = (
         timeout=60 * 20,
     )
 )
-
-stub = Stub("vLLM-OpenAI-server", image=image)
