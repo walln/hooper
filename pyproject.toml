@@ -5,7 +5,10 @@ description = "Add your description here"
 authors = [
     { name = "Nick Wall", email = "46641379+walln@users.noreply.github.com" }
 ]
-dependencies = []
+dependencies = [
+    "modal>=0.62.97",
+    "text-generation>=0.7.0",
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 
