@@ -1,11 +1,5 @@
-# Python stuff
-.venv
-.pytest_cache
-.ruff_cache
-__pycache__
-.env
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# JS stuff
 # dependencies
 /node_modules
 /.pnp

@@ -1,3 +1,4 @@
 rye 0.32.0
 python 3.11.7
 pnpm 9.0.5
+nodejs 21.4.0
