@@ -12,6 +12,7 @@ app = modal.App(name=APP_NAME)
 @app.function(secrets=[modal.Secret.from_name("hooper-api-key")], image=client_image)
 def test_client():
     """TGI OpenAI compatible server test client."""
+    import instructor
     from openai import OpenAI
 
     api_key = os.getenv("HOOPER_API_KEY")
@@ -24,6 +25,8 @@ def test_client():
         base_url=f"{BASE_URL}v1",
         api_key=api_key,
     )
+
+    client = instructor.from_openai(client)
 
     completion = client.chat.completions.create(
         model="tgi",

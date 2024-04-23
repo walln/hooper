@@ -64,7 +64,7 @@ distlib==0.3.8
 distro==1.9.0
     # via anthropic
     # via openai
-docstring-parser==0.15
+docstring-parser==0.16
     # via instructor
 fastapi==0.110.0
     # via backend
@@ -119,7 +119,7 @@ idna==3.6
     # via yarl
 iniconfig==2.0.0
     # via pytest
-instructor==1.0.0
+instructor==1.2.2
     # via backend
 interegular==0.3.3
     # via outlines
@@ -226,7 +226,6 @@ nvidia-nvjitlink-cu12==12.4.99
 nvidia-nvtx-cu12==12.1.105
     # via torch
 openai==1.14.3
-    # via backend
     # via instructor
 orjson==3.10.0
     # via langsmith
@@ -253,7 +252,7 @@ protobuf==4.25.3
     # via ray
 psutil==5.9.8
     # via vllm
-pydantic==2.6.4
+pydantic==2.7.0
     # via anthropic
     # via backend
     # via fastapi
@@ -265,7 +264,8 @@ pydantic==2.6.4
     # via outlines
     # via text-generation
     # via vllm
-pydantic-core==2.16.3
+pydantic-core==2.18.1
+    # via instructor
     # via pydantic
 pygments==2.17.2
     # via rich

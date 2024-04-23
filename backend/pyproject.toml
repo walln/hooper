@@ -15,8 +15,7 @@ dependencies = [
     "pydantic>=2.6.4",
     "fastapi>=0.110.0",
     "vllm>=0.3.3",
-    "openai>=1.14.3",
-    "instructor>=1.0.0",
+    "instructor>=1.2.2",
     "anthropic>=0.21.3",
 ]
 readme = "README.md"
