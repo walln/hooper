@@ -24,7 +24,7 @@ dev-dependencies = [
 virtual = true
 
 [tool.rye.workspace]
-members = ["backend"]
+members = ["apps/backend"]
 
 [tool.ruff.lint]
 pydocstyle.convention = "google"

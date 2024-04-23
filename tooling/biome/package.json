@@ -1,0 +1,13 @@
+{
+	"name": "@hooper/biome",
+	"version": "0.1.0",
+	"private": true,
+	"main": "index.js",
+	"files": ["base.json"],
+	"scripts": {
+		"clean": "rm -rf node_modules"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.7.1"
+	}
+}

@@ -1,0 +1,6 @@
+{
+	"extends": "@hooper/tsconfig/base.json",
+	"compilerOptions": {
+		"noEmit": true
+	}
+}

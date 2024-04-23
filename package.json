@@ -1,0 +1,31 @@
+{
+	"name": "hooper",
+	"version": "0.1.0",
+	"private": true,
+	"description": "AI for ball knowers.",
+	"license": "MIT",
+	"author": "Nick Wall 46641379+walln@users.noreply.github.com",
+	"type": "module",
+	"devDependencies": {
+		"@biomejs/biome": "^1.7.1",
+		"@commitlint/cli": "^19.2.2",
+		"@commitlint/config-conventional": "^19.2.2",
+		"@commitlint/config-pnpm-scopes": "^19.1.0",
+		"@commitlint/cz-commitlint": "^19.2.0",
+		"commitizen": "^4.3.0",
+		"@hooper/tsconfig": "workspace:^",
+		"husky": "^9.0.11",
+		"rimraf": "^5.0.5",
+		"lint-staged": "^15.2.2",
+		"typescript": "^5"
+	},
+	"scripts": {
+		"lint:frontend": "biome lint .",
+		"lint:frontend:fix": "biome lint --apply .",
+		"format:frontend": "biome format .",
+		"format:frontend:fix": "biome format --write .",
+		"commit": "git-cz",
+		"prepare": "husky"
+	},
+	"packageManager": "pnpm@9.0.5"
+}
