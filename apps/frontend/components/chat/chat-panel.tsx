@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { ButtonScrollToBottom } from "@/components/button-scroll-to-bottom";
-import { ChatShareDialog } from "@/components/chat-share-dialog";
+import { ButtonScrollToBottom } from "@/components/chat/button-scroll-to-bottom";
+import { ChatShareDialog } from "@/components/chat/chat-share-dialog";
+import { PromptForm } from "@/components/chat/prompt-form";
 import { FooterText } from "@/components/footer";
-import { PromptForm } from "@/components/prompt-form";
 import { Button } from "@/components/ui/button";
 import { IconShare } from "@/components/ui/icons";
 import { shareChat } from "@/lib/actions";
@@ -16,6 +16,7 @@ export interface ChatPanelProps {
 	id?: string;
 	title?: string;
 	input: string;
+	shared?: boolean;
 	setInput: (value: string) => void;
 	isAtBottom: boolean;
 	scrollToBottom: () => void;
@@ -25,6 +26,7 @@ export function ChatPanel({
 	id,
 	title,
 	input,
+	shared,
 	setInput,
 	isAtBottom,
 	scrollToBottom,
@@ -36,24 +38,24 @@ export function ChatPanel({
 
 	const exampleMessages = [
 		{
-			heading: "What are the",
-			subheading: "trending memecoins today?",
-			message: "What are the trending memecoins today?",
+			heading: "Who is leading the league",
+			subheading: "in points per game?",
+			message: "Who is leading the league in points per game?",
 		},
 		{
-			heading: "What is the price of",
-			subheading: "$DOGE right now?",
-			message: "What is the price of $DOGE right now?",
+			heading: "What team has",
+			subheading: "the best record in the east?",
+			message: "What team has the best record in the east?",
 		},
 		{
-			heading: "I would like to buy",
-			subheading: "42 $DOGE",
-			message: "I would like to buy 42 $DOGE",
+			heading: "Who is most likely",
+			subheading: "to win the MVP?",
+			message: "Who is most likely to win the MVP?",
 		},
 		{
-			heading: "What are some",
-			subheading: "recent events about $DOGE?",
-			message: "What are some recent events about $DOGE?",
+			heading: "What games are",
+			subheading: "hapenning today?",
+			message: "What games are happening today?",
 		},
 	];
 
@@ -106,7 +108,7 @@ export function ChatPanel({
 				{messages?.length >= 2 ? (
 					<div className="flex h-12 items-center justify-center">
 						<div className="flex space-x-2">
-							{id && title ? (
+							{title && id && (
 								<>
 									<Button
 										variant="outline"
@@ -122,18 +124,19 @@ export function ChatPanel({
 										shareChat={shareChat}
 										chat={{
 											id,
-											title,
+											title: title,
 											messages: aiState.messages,
 										}}
 									/>
 								</>
-							) : null}
+							)}
 						</div>
 					</div>
 				) : null}
 
 				<div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
-					<PromptForm input={input} setInput={setInput} />
+					{/* TODO: Check that if the chat has been shared that it cannot be edited */}
+					{!shared && <PromptForm input={input} setInput={setInput} />}
 					<FooterText className="hidden sm:block" />
 				</div>
 			</div>

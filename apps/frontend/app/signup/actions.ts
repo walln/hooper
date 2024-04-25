@@ -1,15 +1,14 @@
 "use server";
 
+import { FormSchema } from "@/app/signup/schema";
 import { signIn } from "@/auth";
-import { ResultCode, getStringFromBuffer } from "@/lib/utils";
-import { z } from "zod";
+import { logger } from "@/lib/logger";
+import { ResultCode, nanoid } from "@/lib/utils";
+import { db } from "@hooper/db";
+import { users } from "@hooper/db/schema";
 import { getUser } from "../login/actions";
 
-export async function createUser(
-	email: string,
-	hashedPassword: string,
-	salt: string,
-) {
+export async function createUser(email: string) {
 	const existingUser = await getUser(email);
 
 	if (existingUser) {
@@ -18,14 +17,16 @@ export async function createUser(
 			resultCode: ResultCode.UserAlreadyExists,
 		};
 	}
-	const user = {
-		id: crypto.randomUUID(),
-		email,
-		password: hashedPassword,
-		salt,
-	};
 
-	await kv.hmset(`user:${email}`, user);
+	const name = email.split("@")[0];
+
+	const user = await db.insert(users).values({
+		id: nanoid(),
+		email: email,
+		name: name,
+	});
+
+	logger.info(`User created: ${user}`);
 
 	return {
 		type: "success",
@@ -39,35 +40,22 @@ interface Result {
 }
 
 export async function signup(
-	_prevState: Result | undefined,
-	formData: FormData,
-): Promise<Result | undefined> {
-	const email = formData.get("email") as string;
-	const password = formData.get("password") as string;
+	_prevState: Result | null,
+	data: FormData,
+): Promise<Result> {
+	const parsed = FormSchema.safeParse(Object.fromEntries(data));
+	if (!parsed.success) {
+		return {
+			type: "error",
+			resultCode: ResultCode.InvalidSubmission,
+		};
+	}
 
-	const parsedCredentials = z
-		.object({
-			email: z.string().email(),
-			password: z.string().min(6),
-		})
-		.safeParse({
-			email,
-			password,
-		});
-
-	if (parsedCredentials.success) {
-		const salt = crypto.randomUUID();
-
-		const encoder = new TextEncoder();
-		const saltedPassword = encoder.encode(password + salt);
-		const hashedPasswordBuffer = await crypto.subtle.digest(
-			"SHA-256",
-			saltedPassword,
-		);
-		const hashedPassword = getStringFromBuffer(hashedPasswordBuffer);
-
+	//TODO: move to better provider
+	if (parsed.success && parsed.data.password === "testing123") {
 		try {
-			const result = await createUser(email, hashedPassword, salt);
+			const { email, password } = parsed.data;
+			const result = await createUser(email);
 
 			if (result.resultCode === ResultCode.UserCreated) {
 				await signIn("credentials", {
@@ -79,6 +67,7 @@ export async function signup(
 
 			return result;
 		} catch (error) {
+			logger.error("Error signing up", { error });
 			return {
 				type: "error",
 				resultCode: ResultCode.UnknownError,

@@ -6,8 +6,8 @@ import {
 	BotMessage,
 	SpinnerMessage,
 	UserMessage,
-} from "@/components/message";
-import { nanoid, runOpenAICompletion } from "@/lib/utils/index";
+} from "@/components/chat/message";
+import { nanoid } from "@/lib/utils";
 import {
 	createAI,
 	createStreamableUI,
@@ -70,8 +70,10 @@ async function submitUserMessage(content: string) {
 			{
 				role: "system",
 				content: `\
-You are a flight assistant and can help users step by step.
-You and the user can discuss flight information, such as departure and arrival locations.`,
+You are an AI agent that helps users ask questions and get information about what is going on in the NBA. 
+You are allowed to respond like die-hard NBA fan and have opinions about players and teams, but always remember to be respectful and helpful.
+Today's date is ${new Date().toLocaleDateString()}
+`,
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: TODO: use ChatCompletion union types
 			...aiState.get().messages.map((info: any) => ({
@@ -130,6 +132,8 @@ export const AI = createAI<AIState, UIState>({
 			const aiState = getAIState();
 
 			if (aiState) {
+				console.log("AI State: ", aiState);
+
 				const uiState = getUIStateFromAIState(aiState);
 				return uiState;
 			}
@@ -157,6 +161,7 @@ export const AI = createAI<AIState, UIState>({
 				createdAt,
 				messages,
 				path,
+				sharePath: null,
 			};
 
 			await saveChat(chat);
@@ -167,10 +172,12 @@ export const AI = createAI<AIState, UIState>({
 });
 
 export const getUIStateFromAIState = (aiState: Chat) => {
+	console.log(typeof aiState.messages);
+
 	return aiState.messages
 		.filter((message) => message.role !== "system")
 		.map((message, index) => ({
-			id: `${aiState.chatId}-${index}`,
+			id: `${aiState.id}-${index}`,
 			display:
 				message.role ===
 				// TODO: function calling based on message.name

@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
-import { Chat } from "@/components/chat";
+import { Chat } from "@/components/chat/chat";
 import { AI } from "@/lib/chat/actions";
 import type { Session } from "@/lib/types";
-import { nanoid } from "@/lib/utils/index";
+import { nanoid } from "@/lib/utils";
 import { getMissingKeys } from "../../lib/actions";
 
 export const metadata = {

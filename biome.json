@@ -1,6 +1,6 @@
 {
 	"extends": ["./tooling/biome/base.json"],
 	"files": {
-		"ignore": ["node_modules", ".next", ".turbo", "dist", ".venv"]
+		"ignore": ["node_modules", ".next", ".turbo", "dist", ".venv", ".sst"]
 	}
 }

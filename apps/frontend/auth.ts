@@ -1,4 +1,7 @@
-import NextAuth from "next-auth";
+import { db } from "@hooper/db";
+import { users } from "@hooper/db/schema";
+import { eq } from "drizzle-orm";
+import NextAuth, { type Session, type User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { object, string } from "zod";
 
@@ -22,15 +25,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				password: {},
 			},
 			authorize: async (credentials) => {
-				let user = null;
-
 				const { email, password } = await signInSchema.parseAsync(credentials);
 
-				// logic to salt and hash password
-				const pwHash = saltAndHashPassword(password);
-
-				// logic to verify if user exists
-				user = await getUserFromDb(email, pwHash);
+				const user = await db
+					.select()
+					.from(users)
+					.where(eq(users.email, email))
+					.get();
 
 				if (!user) {
 					// No user found, so this is their first attempt to login
@@ -43,4 +44,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 		}),
 	],
+	callbacks: {
+		async session({ session, user }: { session: Session; user?: User }) {
+			if (user && session?.user) {
+				session.user.id = user.id;
+			}
+			return session;
+		},
+	},
 });

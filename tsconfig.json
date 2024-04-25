@@ -1,6 +1,6 @@
 {
-	"extends": "@hooper/tsconfig/base.json",
 	"compilerOptions": {
-		"noEmit": true
+		"lib": ["esnext"],
+		"types": ["@cloudflare/workers-types"]
 	}
 }

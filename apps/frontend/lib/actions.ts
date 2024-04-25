@@ -1,6 +1,11 @@
 "use server";
 
 import { auth } from "@/auth";
+import { logger } from "@/lib/logger";
+import { db } from "@hooper/db";
+import { chats } from "@hooper/db/schema";
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { Chat, ServerActionResult } from "./types";
 
@@ -15,17 +20,21 @@ export async function getMissingKeys() {
 		.filter((key) => key !== "");
 }
 
-export async function saveChat(chat: Chat) {
+export type InsertChat = typeof chats.$inferInsert;
+
+export async function saveChat(chat: InsertChat) {
 	const session = await auth();
 
 	if (session?.user) {
-		// const pipeline = kv.pipeline()
-		// pipeline.hmset(`chat:${chat.id}`, chat)
-		// pipeline.zadd(`user:chat:${chat.userId}`, {
-		//   score: Date.now(),
-		//   member: `chat:${chat.id}`
-		// })
-		// await pipeline.exec()
+		const created = await db
+			.insert(chats)
+			.values(chat)
+			.onConflictDoUpdate({
+				target: chats.id,
+				set: { ...chat },
+			})
+			.returning();
+		logger.info("Chat created", { chat: created });
 	} else {
 		return;
 	}
@@ -40,13 +49,12 @@ export async function shareChat(id: string): ServerActionResult<Chat> {
 		};
 	}
 
-	// const chat = await kv.hgetall<Chat>(`chat:${id}`)
-
-	// if (!chat || chat.userId !== session.user.id) {
-	//   return {
-	//     error: 'Something went wrong'
-	//   }
-	// }
+	const chat = await db.select().from(chats).where(eq(chats.id, id)).get();
+	if (!chat || chat.userId !== session.user.id) {
+		return {
+			error: "Something went wrong",
+		};
+	}
 
 	// const payload = {
 	// 	...chat,
@@ -56,8 +64,85 @@ export async function shareChat(id: string): ServerActionResult<Chat> {
 	// await kv.hmset(`chat:${chat.id}`, payload)
 
 	const payload = {
+		...chat,
 		sharePath: `/share/${id}`,
 	};
 
-	return payload as Chat;
+	return payload;
+}
+
+export async function getChats(userId?: string | null) {
+	if (!userId) {
+		return [];
+	}
+
+	try {
+		const found = await db
+			.select()
+			.from(chats)
+			.where(eq(chats.userId, userId))
+			.all();
+		return found;
+	} catch {
+		return [];
+	}
+}
+
+export async function getChat(chatId: string, userId?: string) {
+	const chat = await db.select().from(chats).where(eq(chats.id, chatId)).get();
+
+	if (!chat || (userId && chat.userId !== userId)) {
+		return;
+	}
+
+	return chat;
+}
+
+export async function clearChats() {
+	const session = await auth();
+
+	if (!session?.user?.id) {
+		return {
+			error: "Unauthorized",
+		};
+	}
+
+	const found = await db
+		.select()
+		.from(chats)
+		.where(eq(chats.userId, session.user.id))
+		.all();
+
+	if (!found.length) {
+		return redirect("/");
+	}
+
+	await db.delete(chats).where(eq(chats.userId, session.user.id)).run();
+
+	revalidatePath("/");
+	return redirect("/");
+}
+
+export async function removeChat({ id, path }: { id: string; path: string }) {
+	const session = await auth();
+
+	if (!session) {
+		return {
+			error: "Unauthorized",
+		};
+	}
+
+	const chat = await db.select().from(chats).where(eq(chats.id, id)).get();
+	const userId = chat?.userId;
+
+	if (userId !== session?.user?.id) {
+		return {
+			error: "Unauthorized",
+		};
+	}
+
+	await db.delete(chats).where(eq(chats.id, id)).run();
+
+	revalidatePath("/");
+	return revalidatePath(path);
 }

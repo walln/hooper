@@ -1,4 +1,4 @@
-import { SidebarDesktop } from "@/components/sidebar-desktop";
+import { SidebarDesktop } from "@/components/chat/sidebar/sidebar-desktop";
 
 interface ChatLayoutProps {
 	children: React.ReactNode;

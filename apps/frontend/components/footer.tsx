@@ -1,4 +1,3 @@
-import { ExternalLink } from "@/components/external-link";
 import { cn } from "@/lib/utils";
 
 export function FooterText({ className, ...props }: React.ComponentProps<"p">) {
@@ -10,9 +9,8 @@ export function FooterText({ className, ...props }: React.ComponentProps<"p">) {
 			)}
 			{...props}
 		>
-			Open source AI chatbot built with{" "}
-			<ExternalLink href="https://nextjs.org">Next.js</ExternalLink> and{" "}
-			<ExternalLink href="https://sdk.vercel.ai">Vercel AI SDK</ExternalLink>.
+			Hooper is a chatbot - don't get too upset if it doesn't share your
+			opinions. (Talking to you Lakers fans)
 		</p>
 	);
 }

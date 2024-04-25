@@ -1,15 +1,6 @@
-import type { Message } from "ai";
+import type { chats } from "@hooper/db/schema";
 
-// biome-ignore lint/suspicious/noExplicitAny: Allow extra keys
-export interface Chat extends Record<string, any> {
-	id: string;
-	title: string;
-	createdAt: Date;
-	userId: string;
-	path: string;
-	messages: Message[];
-	sharePath?: string;
-}
+export type Chat = typeof chats.$inferSelect;
 
 export type ServerActionResult<Result> = Promise<
 	| Result

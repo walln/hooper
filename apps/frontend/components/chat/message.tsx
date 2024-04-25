@@ -1,10 +1,9 @@
 "use client";
 
-import { IconAI, IconUser } from "@/components/ui/icons";
+import { IconAI, IconSpinner, IconUser } from "@/components/ui/icons";
 import { useStreamableText } from "@/lib/hooks/use-streamable-text";
 import { cn } from "@/lib/utils";
 import type { StreamableValue } from "ai/rsc";
-import { spinner } from "./spinner";
 
 export function UserMessage({ children }: { children: React.ReactNode }) {
 	return (
@@ -78,7 +77,7 @@ export function SpinnerMessage() {
 				<IconAI />
 			</div>
 			<div className="ml-4 h-[24px] flex flex-row items-center flex-1 space-y-2 overflow-hidden px-1">
-				{spinner}
+				<IconSpinner />
 			</div>
 		</div>
 	);

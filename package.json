@@ -8,24 +8,35 @@
 	"type": "module",
 	"devDependencies": {
 		"@biomejs/biome": "^1.7.1",
+		"@cloudflare/workers-types": "4.20240423.0",
 		"@commitlint/cli": "^19.2.2",
 		"@commitlint/config-conventional": "^19.2.2",
 		"@commitlint/config-pnpm-scopes": "^19.1.0",
 		"@commitlint/cz-commitlint": "^19.2.0",
+		"@hooper/tsconfig": "workspace:*",
 		"commitizen": "^4.3.0",
-		"@hooper/tsconfig": "workspace:^",
 		"husky": "^9.0.11",
-		"rimraf": "^5.0.5",
 		"lint-staged": "^15.2.2",
+		"rimraf": "^5.0.5",
 		"typescript": "^5"
 	},
 	"scripts": {
-		"lint:frontend": "biome lint .",
-		"lint:frontend:fix": "biome lint --apply .",
+		"commit": "git-cz",
 		"format:frontend": "biome format .",
 		"format:frontend:fix": "biome format --write .",
-		"commit": "git-cz",
-		"prepare": "husky"
+		"lint:frontend": "biome lint .",
+		"lint:frontend:fix": "biome lint --apply .",
+		"prepare": "husky",
+		"dev": "bun run --cwd apps/frontend/ dev"
 	},
-	"packageManager": "pnpm@9.0.5"
+	"packageManager": "pnpm@9.0.5",
+	"dependencies": {
+		"sst": "ion"
+	},
+	"workspaces": [
+		"packages/db",
+		"apps/frontend",
+		"tooling/biome",
+		"tooling/typescript-config"
+	]
 }

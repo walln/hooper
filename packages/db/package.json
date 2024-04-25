@@ -1,0 +1,29 @@
+{
+	"name": "@hooper/db",
+	"version": "0.1.0",
+	"private": true,
+	"description": "A database package utilizing drizzle orm.",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./schema": "./src/schema/index.ts"
+	},
+	"scripts": {
+		"db:push": "drizzle-kit push:sqlite",
+		"db:studio": "drizzle-kit studio",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@neondatabase/serverless": "^0.9.1",
+		"@libsql/client": "^0.6.0",
+		"drizzle-orm": "^0.30.9",
+		"ai": "^3.0.28",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@hooper/tsconfig": "workspace:*",
+		"drizzle-kit": "^0.20.17",
+		"tsx": "^4.7.2"
+	}
+}

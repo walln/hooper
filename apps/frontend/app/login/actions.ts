@@ -1,12 +1,19 @@
 "use server";
 
 import { signIn } from "@/auth";
-import type { User } from "@/lib/types";
 import { ResultCode } from "@/lib/utils";
+import { db } from "@hooper/db";
+import { users } from "@hooper/db/schema";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { FormSchema } from "../signup/schema";
 
 export async function getUser(email: string) {
-	const user = await kv.hgetall<User>(`user:${email}`);
+	const user = await db
+		.select()
+		.from(users)
+		.where(eq(users.email, email))
+		.get();
 	return user;
 }
 
@@ -15,25 +22,20 @@ interface Result {
 	resultCode: ResultCode;
 }
 
-export async function authenticate(
-	_prevState: Result | undefined,
-	formData: FormData,
-): Promise<Result | undefined> {
+export async function login(
+	_prevState: Result | null,
+	data: FormData,
+): Promise<Result> {
+	const parsed = FormSchema.safeParse(Object.fromEntries(data));
+	if (!parsed.success) {
+		return {
+			type: "error",
+			resultCode: ResultCode.InvalidSubmission,
+		};
+	}
 	try {
-		const email = formData.get("email");
-		const password = formData.get("password");
-
-		const parsedCredentials = z
-			.object({
-				email: z.string().email(),
-				password: z.string().min(6),
-			})
-			.safeParse({
-				email,
-				password,
-			});
-
-		if (parsedCredentials.success) {
+		if (parsed.success) {
+			const { email, password } = parsed.data;
 			await signIn("credentials", {
 				email,
 				password,
