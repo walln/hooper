@@ -1,11 +1,9 @@
-import * as React from "react";
-
-import Link from "next/link";
-
 import { SidebarList } from "@/components/chat/sidebar/sidebar-list";
 import { buttonVariants } from "@/components/ui/button";
 import { IconPlus } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import * as React from "react";
 
 interface ChatHistoryProps {
 	userId?: string;
@@ -42,7 +40,6 @@ export async function ChatHistory({ userId }: ChatHistoryProps) {
 					</div>
 				}
 			>
-				{/* @ts-ignore */}
 				<SidebarList userId={userId} />
 			</React.Suspense>
 		</div>

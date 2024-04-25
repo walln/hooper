@@ -1,7 +1,6 @@
 "use server";
 
 import { auth } from "@/auth";
-import { logger } from "@/lib/logger";
 import { db } from "@hooper/db";
 import { chats } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
@@ -25,19 +24,20 @@ export type InsertChat = typeof chats.$inferInsert;
 export async function saveChat(chat: InsertChat) {
 	const session = await auth();
 
-	if (session?.user) {
-		const created = await db
-			.insert(chats)
-			.values(chat)
-			.onConflictDoUpdate({
-				target: chats.id,
-				set: { ...chat },
-			})
-			.returning();
-		logger.info("Chat created", { chat: created });
-	} else {
+	if (!session?.user?.id) {
 		return;
 	}
+
+	const { id, ...chatData } = chat;
+	await db
+		.insert(chats)
+		.values(chat)
+		.onConflictDoUpdate({
+			target: chats.id,
+			set: chatData,
+		})
+		.returning()
+		.get();
 }
 
 export async function shareChat(id: string): ServerActionResult<Chat> {
@@ -56,16 +56,9 @@ export async function shareChat(id: string): ServerActionResult<Chat> {
 		};
 	}
 
-	// const payload = {
-	// 	...chat,
-	// 	sharePath: `/share/${chat.id}`,
-	// };
-
-	// await kv.hmset(`chat:${chat.id}`, payload)
-
 	const payload = {
 		...chat,
-		sharePath: `/share/${id}`,
+		sharePath: `/share/${chat.id}`,
 	};
 
 	return payload;

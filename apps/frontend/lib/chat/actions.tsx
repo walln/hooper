@@ -132,8 +132,6 @@ export const AI = createAI<AIState, UIState>({
 			const aiState = getAIState();
 
 			if (aiState) {
-				console.log("AI State: ", aiState);
-
 				const uiState = getUIStateFromAIState(aiState);
 				return uiState;
 			}
@@ -172,8 +170,6 @@ export const AI = createAI<AIState, UIState>({
 });
 
 export const getUIStateFromAIState = (aiState: Chat) => {
-	console.log(typeof aiState.messages);
-
 	return aiState.messages
 		.filter((message) => message.role !== "system")
 		.map((message, index) => ({

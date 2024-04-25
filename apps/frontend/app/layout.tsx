@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
-import { AI } from "../lib/chat/actions";
 import "./globals.css";
 
 export const metadata: Metadata = {

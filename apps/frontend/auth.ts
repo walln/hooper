@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import NextAuth, { type Session, type User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { object, string } from "zod";
+import { logger } from "./lib/logger";
 
 export const signInSchema = object({
 	email: string({ required_error: "Email is required" })
@@ -16,6 +17,9 @@ export const signInSchema = object({
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	session: {
+		strategy: "jwt",
+	},
 	providers: [
 		Credentials({
 			// You can specify which fields should be submitted, by adding keys to the `credentials` object.
@@ -45,11 +49,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		}),
 	],
 	callbacks: {
-		async session({ session, user }: { session: Session; user?: User }) {
-			if (user && session?.user) {
-				session.user.id = user.id;
+		async jwt({ token, user, account }) {
+			return token;
+		},
+		async session({ session, token }) {
+			if (token.sub && session?.user) {
+				session.user.id = token.sub;
 			}
-			return session;
+			return {
+				...session,
+			};
 		},
 	},
 });

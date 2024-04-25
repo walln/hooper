@@ -33,8 +33,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
 	const session = (await auth()) as Session;
 	const missingKeys = await getMissingKeys();
 
-	console.log("Session: ", session);
-
 	if (!session?.user) {
 		redirect(`/login?next=/chat/${params.id}`);
 	}
