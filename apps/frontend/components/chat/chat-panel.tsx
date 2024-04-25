@@ -108,7 +108,7 @@ export function ChatPanel({
 				{messages?.length >= 2 ? (
 					<div className="flex h-12 items-center justify-center">
 						<div className="flex space-x-2">
-							{title && id && (
+							{id && title && (
 								<>
 									<Button
 										variant="outline"

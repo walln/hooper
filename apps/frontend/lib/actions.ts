@@ -28,7 +28,7 @@ export async function saveChat(chat: InsertChat) {
 		return;
 	}
 
-	const { id, ...chatData } = chat;
+	const { id, sharePath, ...chatData } = chat;
 	await db
 		.insert(chats)
 		.values(chat)
@@ -61,7 +61,25 @@ export async function shareChat(id: string): ServerActionResult<Chat> {
 		sharePath: `/share/${chat.id}`,
 	};
 
+	await db
+		.update(chats)
+		.set({
+			sharePath: payload.sharePath,
+		})
+		.where(eq(chats.id, chat.id))
+		.run();
+
 	return payload;
+}
+
+export async function getSharedChat(id: string) {
+	const chat = await db.select().from(chats).where(eq(chats.id, id)).get();
+
+	if (!chat || !chat.sharePath) {
+		return null;
+	}
+
+	return chat;
 }
 
 export async function getChats(userId?: string | null) {

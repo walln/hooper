@@ -20,7 +20,13 @@ export interface ChatProps extends React.ComponentProps<"div"> {
 	missingKeys: string[];
 }
 
-export function Chat({ id, className, session, missingKeys }: ChatProps) {
+export function Chat({
+	id,
+	className,
+	session,
+	missingKeys,
+	title,
+}: ChatProps) {
 	const router = useRouter();
 	const path = usePathname();
 	const [input, setInput] = useState("");
@@ -77,6 +83,7 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
 			</div>
 			<ChatPanel
 				id={id}
+				title={title}
 				input={input}
 				setInput={setInput}
 				isAtBottom={isAtBottom}
