@@ -27,7 +27,7 @@
 		"lint:frontend": "biome lint .",
 		"lint:frontend:fix": "biome lint --apply .",
 		"prepare": "husky",
-		"dev": "bun run --cwd apps/frontend/ dev"
+		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'"
 	},
 	"packageManager": "pnpm@9.0.5",
 	"dependencies": {

@@ -1,7 +1,7 @@
 "use client";
 
-import { signup } from "@/app/signup/actions";
-import { FormSchema } from "@/app/signup/schema";
+import { signup } from "@/app/(auth)/signup/actions";
+import { FormSchema } from "@/app/(auth)/signup/schema";
 import { Button } from "@/components/ui/button";
 import {
 	Form,

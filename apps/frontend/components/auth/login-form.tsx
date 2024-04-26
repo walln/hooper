@@ -1,7 +1,7 @@
 "use client";
 
-import { login } from "@/app/login/actions";
-import { FormSchema } from "@/app/signup/schema";
+import { login } from "@/app/(auth)/login/actions";
+import { FormSchema } from "@/app/(auth)/signup/schema";
 import { Button } from "@/components/ui/button";
 import {
 	Form,

@@ -145,6 +145,53 @@ Today's date is ${new Date().toLocaleDateString()}
 					return <BotMessage content={content} />;
 				},
 			},
+			getScores: {
+				description: "Get the latest NBA scores",
+				parameters: z.object({
+					date: z.date().describe("The date to get scores for"),
+				}),
+				render: async function* ({ date }) {
+					// Date format yyyymmdd
+					const rawDate = new Date(date);
+					const formattedDate = `${rawDate.getFullYear()}-${rawDate
+						.getMonth()
+						.toString()
+						.padStart(2, "0")}-${rawDate
+						.getDate()
+						.toString()
+						.padStart(2, "0")}`;
+					console.log(formattedDate);
+
+					yield <BotMessage content={`Searching for scores on ${date}...`} />;
+
+					console.log("fetching scores");
+
+					const response = await fetch(
+						`https://r.jina.ai/https://www.basketball-reference.com/boxscores/?month=${
+							rawDate.getMonth() + 1
+						}&day=${rawDate.getDate() + 1}&year=${rawDate.getFullYear()}`,
+					);
+
+					const result = await response.text();
+
+					const content = `Gathered the latest scores:: ${result}`;
+
+					aiState.done({
+						...aiState.get(),
+						messages: [
+							...aiState.get().messages,
+							{
+								id: nanoid(),
+								role: "function",
+								name: "getScores",
+								content: content,
+							},
+						],
+					});
+
+					return <BotMessage content={content} />;
+				},
+			},
 		},
 	});
 
@@ -212,6 +259,10 @@ export const getUIStateFromAIState = (aiState: Chat) => {
 		return match(message.role)
 			.with("function", () => {
 				if (message.name === "getNews") {
+					return <BotMessage content={message.content} />;
+				}
+
+				if (message.name === "getScores") {
 					return <BotMessage content={message.content} />;
 				}
 

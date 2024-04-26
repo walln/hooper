@@ -1,12 +1,12 @@
 "use server";
 
+import { FormSchema } from "@/app/(auth)/signup/schema";
 import { signIn } from "@/auth";
 import { ResultCode } from "@/lib/utils";
 import { db } from "@hooper/db";
 import { users } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { FormSchema } from "../signup/schema";
 
 export async function getUser(email: string) {
 	const user = await db

@@ -1,12 +1,12 @@
 "use server";
 
-import { FormSchema } from "@/app/signup/schema";
+import { getUser } from "@/app/(auth)/login/actions";
+import { FormSchema } from "@/app/(auth)/signup/schema";
 import { signIn } from "@/auth";
 import { logger } from "@/lib/logger";
 import { ResultCode, nanoid } from "@/lib/utils";
 import { db } from "@hooper/db";
 import { users } from "@hooper/db/schema";
-import { getUser } from "../login/actions";
 
 export async function createUser(email: string) {
 	const existingUser = await getUser(email);
