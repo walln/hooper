@@ -7,7 +7,9 @@ import {
 	SpinnerMessage,
 	UserMessage,
 } from "@/components/chat/message";
-import { nanoid } from "@/lib/utils";
+import { saveChat } from "@/lib/actions";
+import type { Chat } from "@/lib/types";
+import { nanoid, sleep } from "@/lib/utils";
 import {
 	createAI,
 	createStreamableUI,
@@ -16,10 +18,9 @@ import {
 	getMutableAIState,
 	render,
 } from "ai/rsc";
-import { OpenAI } from "openai";
-
-import type { Chat } from "@/lib/types";
-import { saveChat } from "../actions";
+import OpenAI from "openai";
+import { match } from "ts-pattern";
+import { z } from "zod";
 
 export type Message = {
 	role: "user" | "assistant" | "system" | "function" | "data" | "tool";
@@ -108,6 +109,43 @@ Today's date is ${new Date().toLocaleDateString()}
 			return textNode;
 		},
 		temperature: 0,
+		functions: {
+			getNews: {
+				description: "Get the latest NBA news",
+				parameters: z.object({
+					query: z.string().describe("The search query"),
+				}),
+				render: async function* ({ query }) {
+					// yield (
+					// 	<BotCard>
+					// 		{/* TODO: skeleton */}
+					// 		<BotMessage content={`Searching for news about ${query}...`} />
+					// 	</BotCard>
+					// );
+
+					yield <BotMessage content={`Searching for news about ${query}...`} />;
+
+					await sleep(10000);
+
+					const content = `Gathered the latest news about the NBA. - Query: ${query}`;
+
+					aiState.done({
+						...aiState.get(),
+						messages: [
+							...aiState.get().messages,
+							{
+								id: nanoid(),
+								role: "function",
+								name: "getNews",
+								content: content,
+							},
+						],
+					});
+
+					return <BotMessage content={content} />;
+				},
+			},
+		},
 	});
 
 	return {
@@ -170,18 +208,27 @@ export const AI = createAI<AIState, UIState>({
 });
 
 export const getUIStateFromAIState = (aiState: Chat) => {
+	function getDisplay(message: Message): JSX.Element | null {
+		return match(message.role)
+			.with("function", () => {
+				if (message.name === "getNews") {
+					return <BotMessage content={message.content} />;
+				}
+
+				return null;
+			})
+			.with("user", () => <UserMessage>{message.content}</UserMessage>)
+			.with("assistant", () => <BotMessage content={message.content} />)
+			.with("data", () => null)
+			.with("tool", () => null)
+			.with("system", () => null)
+			.exhaustive();
+	}
+
 	return aiState.messages
 		.filter((message) => message.role !== "system")
 		.map((message, index) => ({
 			id: `${aiState.id}-${index}`,
-			display:
-				message.role ===
-				// TODO: function calling based on message.name
-				"function" ? null : // message.name === "listStocks" ? (
-				message.role === "user" ? (
-					<UserMessage>{message.content}</UserMessage>
-				) : (
-					<BotMessage content={message.content} />
-				),
+			display: getDisplay(message),
 		}));
 };

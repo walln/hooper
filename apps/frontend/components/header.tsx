@@ -2,13 +2,50 @@ import Link from "next/link";
 
 import { auth } from "@/auth";
 import { SignIn, SignOut } from "@/components/auth/auth-buttons";
+import { ChatHistory } from "@/components/chat/chat-history";
+import { SidebarMobile } from "@/components/chat/sidebar/sidebar-mobile";
+import { SidebarToggle } from "@/components/chat/sidebar/sidebar-toggle";
 import { Button } from "@/components/ui/button";
 import {
 	IconGitHub,
 	IconHooper,
+	IconNextChat,
 	IconSeparator,
 	IconSparkles,
 } from "@/components/ui/icons";
+import { UserMenu } from "@/components/user-menu";
+import React from "react";
+
+async function UserOrLogin() {
+	const session = await auth();
+	return (
+		<>
+			{session?.user ? (
+				<>
+					<SidebarMobile>
+						<ChatHistory userId={session.user.id} />
+					</SidebarMobile>
+					<SidebarToggle />
+				</>
+			) : (
+				<Link href="/new" rel="nofollow">
+					<IconNextChat className="size-6 mr-2 dark:hidden" inverted />
+					<IconNextChat className="hidden size-6 mr-2 dark:block" />
+				</Link>
+			)}
+			<div className="flex items-center">
+				<IconSeparator className="size-6 text-muted-foreground/50" />
+				{session?.user ? (
+					<UserMenu user={session.user} />
+				) : (
+					<Button variant="link" asChild className="-ml-2">
+						<Link href="/login">Login</Link>
+					</Button>
+				)}
+			</div>
+		</>
+	);
+}
 
 export async function Header() {
 	const session = await auth();
@@ -31,7 +68,11 @@ export async function Header() {
 				</Link>
 			</span>
 			<div className="flex items-center justify-end space-x-2">
-				{session?.user ? <SignOut /> : <SignIn />}
+				<React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
+					<UserOrLogin />
+				</React.Suspense>
+
+				{/* {session?.user ? <SignOut /> : <SignIn />} */}
 				<Button variant="outline" asChild>
 					<a
 						target="_blank"

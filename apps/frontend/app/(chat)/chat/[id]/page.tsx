@@ -44,8 +44,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
 		redirect("/");
 	}
 
-	logger.info("ChatPage", { chat });
-
 	return (
 		<AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
 			<Chat
