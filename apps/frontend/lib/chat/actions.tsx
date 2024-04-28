@@ -19,6 +19,7 @@ import {
 	render,
 } from "ai/rsc";
 import OpenAI from "openai";
+import { Resource } from "sst";
 import { match } from "ts-pattern";
 import { z } from "zod";
 
@@ -40,7 +41,7 @@ export type UIState = {
 }[];
 
 const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
+	apiKey: Resource.OpenAiApiKey.value,
 });
 
 async function submitUserMessage(content: string) {

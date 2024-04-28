@@ -6,6 +6,7 @@ import { chats } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { Resource } from "sst";
 import type { Chat, ServerActionResult } from "./types";
 
 export async function refreshHistory(path: string) {
@@ -13,9 +14,9 @@ export async function refreshHistory(path: string) {
 }
 
 export async function getMissingKeys() {
-	const keysRequired = ["OPENAI_API_KEY"];
+	const keysRequired = ["OpenAiApiKey"];
 	return keysRequired
-		.map((key) => (process.env[key] ? "" : key))
+		.map((key) => (Resource[key].value ? "" : key))
 		.filter((key) => key !== "");
 }
 

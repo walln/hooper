@@ -11,8 +11,10 @@ export default $config({
 	async run() {
 		const bucket = new sst.cloudflare.Bucket("MyBucket");
 
-		const TursoURL = new sst.Secret("TursoURL", "file:local.db");
-		const TursoToken = new sst.Secret("TursoToken");
+		const TURSO_URL = new sst.Secret("TursoURL", "file:local.db");
+		const TURSO_TOKEN = new sst.Secret("TursoToken");
+		const OPENAI_API_KEY = new sst.Secret("OpenAiApiKey");
+		const AUTH_SECRET = new sst.Secret("AuthSecret");
 
 		// const dns = sst.vercel.dns({
 		// 	domain: "walln.dev",
@@ -22,7 +24,7 @@ export default $config({
 			// 	name: "hooper.walln.dev",
 			// 	dns: dns,
 			// },
-			link: [bucket, TursoURL, TursoToken],
+			link: [bucket, TURSO_URL, TURSO_TOKEN, OPENAI_API_KEY, AUTH_SECRET],
 		});
 
 		return {
