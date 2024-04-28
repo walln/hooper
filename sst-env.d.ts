@@ -19,6 +19,4 @@ declare module "sst" {
 		};
 	}
 }
-// biome-ignore lint/style/useExportType: sst-env.d.ts
-// biome-ignore lint/complexity/noUselessEmptyExport: sst-env.d.ts
 export {};

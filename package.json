@@ -24,8 +24,8 @@
 		"commit": "git-cz",
 		"format:frontend": "biome format .",
 		"format:frontend:fix": "biome format --write .",
-		"lint:frontend": "biome lint .",
-		"lint:frontend:fix": "biome lint --apply .",
+		"lint:frontend": "biome lint apps/frontend",
+		"lint:frontend:fix": "biome lint --apply apps/frontend",
 		"prepare": "husky",
 		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'"
 	},
