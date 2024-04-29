@@ -1,1 +1,1 @@
-/// <reference path="../../sst-env.d.ts" />
+/// <reference path="../../.sst/types.generated.ts" />

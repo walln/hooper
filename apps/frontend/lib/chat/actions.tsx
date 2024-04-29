@@ -14,6 +14,7 @@ import {
 	UserMessage,
 } from "@/components/chat/message";
 import { saveChat } from "@/lib/actions";
+import { checkRateLimit } from "@/lib/rate-limit";
 import type { Chat } from "@/lib/types";
 import { nanoid, sleep } from "@/lib/utils";
 import {
@@ -59,8 +60,16 @@ const openai = new OpenAI({
 async function submitUserMessage(content: string) {
 	"use server";
 
-	const aiState = getMutableAIState<typeof AI>();
+	// Check for rate limit
+	const allowed = await checkRateLimit();
+	if (!allowed) {
+		return {
+			id: Date.now(),
+			display: <BotErrorMessage content={"Rate limited. Try again later."} />,
+		};
+	}
 
+	const aiState = getMutableAIState<typeof AI>();
 	aiState.update({
 		...aiState.get(),
 		messages: [
