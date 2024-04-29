@@ -1,0 +1,22 @@
+{
+	"name": "@hooper/core",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Core package for Hooper",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		".": "./src/index.ts",
+		"./espn": "./src/espn.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hooper/db": "workspace:*",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@hooper/tsconfig": "workspace:*"
+	}
+}

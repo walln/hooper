@@ -36,6 +36,26 @@ export function BotMessage({
 	);
 }
 
+export function BotErrorMessage({
+	content,
+	className,
+}: {
+	content: string | StreamableValue<string>;
+	className?: string;
+}) {
+	const text = useStreamableText(content);
+	return (
+		<div className={cn("group relative flex items-start md:-ml-12", className)}>
+			<div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-md border shadow-sm bg-red-500">
+				<IconAI />
+			</div>
+			<div className="ml-4 flex-1 space-y-2 overflow-hidden px-1 text-red-500">
+				{text}
+			</div>
+		</div>
+	);
+}
+
 export function BotCard({
 	children,
 	showAvatar = true,

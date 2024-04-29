@@ -29,11 +29,12 @@
 		"prepare": "husky",
 		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'"
 	},
-	"packageManager": "pnpm@9.0.5",
+	"packageManager": "bun@1.1.6",
 	"dependencies": {
 		"sst": "ion"
 	},
 	"workspaces": [
+		"packages/core",
 		"packages/db",
 		"apps/frontend",
 		"tooling/biome",

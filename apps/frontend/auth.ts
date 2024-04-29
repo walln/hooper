@@ -3,6 +3,7 @@ import { users } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
 import NextAuth, { type Session, type User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { Resource } from "sst";
 import { object, string } from "zod";
 import { logger } from "./lib/logger";
 
@@ -17,6 +18,7 @@ export const signInSchema = object({
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	secret: Resource.AuthSecret.value,
 	session: {
 		strategy: "jwt",
 	},

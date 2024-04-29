@@ -1,8 +1,14 @@
 import "server-only";
 
 import { auth } from "@/auth";
+import { News, NewsSkeleton } from "@/components/chat/cards/bot-news-card";
+import {
+	Scores,
+	ScoresSkeleton,
+} from "@/components/chat/cards/bot-scores-card";
 import {
 	BotCard,
+	BotErrorMessage,
 	BotMessage,
 	SpinnerMessage,
 	UserMessage,
@@ -10,6 +16,12 @@ import {
 import { saveChat } from "@/lib/actions";
 import type { Chat } from "@/lib/types";
 import { nanoid, sleep } from "@/lib/utils";
+import {
+	NBANewsSchema,
+	NBAScoresSchema,
+	getNbaNews,
+	getNbaScores,
+} from "@hooper/core/espn";
 import {
 	createAI,
 	createStreamableUI,
@@ -114,83 +126,92 @@ Today's date is ${new Date().toLocaleDateString()}
 			getNews: {
 				description: "Get the latest NBA news",
 				parameters: z.object({
-					query: z.string().describe("The search query"),
+					query: z.string().optional().describe("The search query"),
 				}),
 				render: async function* ({ query }) {
-					// yield (
-					// 	<BotCard>
-					// 		{/* TODO: skeleton */}
-					// 		<BotMessage content={`Searching for news about ${query}...`} />
-					// 	</BotCard>
-					// );
+					yield <NewsSkeleton />;
 
-					yield <BotMessage content={`Searching for news about ${query}...`} />;
-
-					await sleep(10000);
-
-					const content = `Gathered the latest news about the NBA. - Query: ${query}`;
-
-					aiState.done({
-						...aiState.get(),
-						messages: [
-							...aiState.get().messages,
-							{
-								id: nanoid(),
-								role: "function",
-								name: "getNews",
-								content: content,
-							},
-						],
-					});
-
-					return <BotMessage content={content} />;
+					try {
+						// TODO: sort based on search query
+						const articles = await getNbaNews();
+						aiState.done({
+							...aiState.get(),
+							messages: [
+								...aiState.get().messages,
+								{
+									id: nanoid(),
+									role: "function",
+									name: "getNews",
+									content: JSON.stringify(articles),
+								},
+							],
+						});
+						<BotCard>
+							<News news={articles} />
+						</BotCard>;
+					} catch (error) {
+						console.error(error);
+						aiState.done({
+							...aiState.get(),
+							messages: [
+								...aiState.get().messages,
+								{
+									id: nanoid(),
+									role: "function",
+									name: "getNews",
+									content: "Failed to get news.",
+								},
+							],
+						});
+						return <BotErrorMessage content={"Failed to get news."} />;
+					}
 				},
 			},
 			getScores: {
-				description: "Get the latest NBA scores",
+				description: "Get the latest NBA scores for a given day",
 				parameters: z.object({
 					date: z.date().describe("The date to get scores for"),
 				}),
 				render: async function* ({ date }) {
-					// Date format yyyymmdd
-					const rawDate = new Date(date);
-					const formattedDate = `${rawDate.getFullYear()}-${rawDate
-						.getMonth()
-						.toString()
-						.padStart(2, "0")}-${rawDate
-						.getDate()
-						.toString()
-						.padStart(2, "0")}`;
-					console.log(formattedDate);
-
 					yield <BotMessage content={`Searching for scores on ${date}...`} />;
+					yield <ScoresSkeleton />;
 
-					console.log("fetching scores");
-
-					const response = await fetch(
-						`https://r.jina.ai/https://www.basketball-reference.com/boxscores/?month=${
-							rawDate.getMonth() + 1
-						}&day=${rawDate.getDate() + 1}&year=${rawDate.getFullYear()}`,
-					);
-
-					const result = await response.text();
-
-					const content = `Gathered the latest scores:: ${result}`;
-
-					aiState.done({
-						...aiState.get(),
-						messages: [
-							...aiState.get().messages,
-							{
-								id: nanoid(),
-								role: "function",
-								name: "getScores",
-								content: content,
-							},
-						],
-					});
-
-					return <BotMessage content={content} />;
+					try {
+						console.log("Getting scores for", new Date(date));
+						const response = await getNbaScores(new Date(date));
+						aiState.done({
+							...aiState.get(),
+							messages: [
+								...aiState.get().messages,
+								{
+									id: nanoid(),
+									role: "function",
+									name: "getScores",
+									content: JSON.stringify(response),
+								},
+							],
+						});
+						return (
+							<BotCard>
+								<Scores scores={response} />
+							</BotCard>
+						);
+					} catch (error) {
+						console.error(error);
+						aiState.done({
+							...aiState.get(),
+							messages: [
+								...aiState.get().messages,
+								{
+									id: nanoid(),
+									role: "function",
+									name: "getScores",
+									content: "Failed to get scores.",
+								},
+							],
+						});
+						return <BotErrorMessage content={"Failed to get scores."} />;
+					}
 				},
 			},
 		},
@@ -260,11 +281,33 @@ export const getUIStateFromAIState = (aiState: Chat) => {
 		return match(message.role)
 			.with("function", () => {
 				if (message.name === "getNews") {
-					return <BotMessage content={message.content} />;
+					try {
+						const data = JSON.parse(message.content);
+						const news = NBANewsSchema.parse(data);
+						return (
+							<BotCard>
+								<News news={news} />
+							</BotCard>
+						);
+					} catch (err) {
+						console.error("Failed to parse articles...", err);
+						return <BotErrorMessage content={"Failed to parse articles..."} />;
+					}
 				}
 
 				if (message.name === "getScores") {
-					return <BotMessage content={message.content} />;
+					try {
+						const data = JSON.parse(message.content);
+						const scores = NBAScoresSchema.parse(data);
+						return (
+							<BotCard>
+								<Scores scores={scores} />
+							</BotCard>
+						);
+					} catch (err) {
+						console.error("Failed to parse scores...", err);
+						return <BotErrorMessage content={"Failed to parse scores..."} />;
+					}
 				}
 
 				return null;

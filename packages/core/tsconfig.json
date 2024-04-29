@@ -1,0 +1,4 @@
+{
+	"extends": ["@hooper/tsconfig/base.json"],
+	"include": ["**/*.ts", "**/*.mjs"]
+}
