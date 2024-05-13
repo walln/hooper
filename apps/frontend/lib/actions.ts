@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth } from "@hooper/auth/next-client";
 import { db } from "@hooper/db";
 import { chats } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
@@ -13,19 +13,12 @@ export async function refreshHistory(path: string) {
 	redirect(path);
 }
 
-export async function getMissingKeys() {
-	const keysRequired = ["OpenAiApiKey"];
-	return keysRequired
-		.map((key) => (Resource[key].value ? "" : key))
-		.filter((key) => key !== "");
-}
-
 export type InsertChat = typeof chats.$inferInsert;
 
 export async function saveChat(chat: InsertChat) {
 	const session = await auth();
 
-	if (!session?.user?.id) {
+	if (session.type !== "user") {
 		return;
 	}
 
@@ -44,14 +37,14 @@ export async function saveChat(chat: InsertChat) {
 export async function shareChat(id: string): ServerActionResult<Chat> {
 	const session = await auth();
 
-	if (!session?.user?.id) {
+	if (session.type !== "user") {
 		return {
 			error: "Unauthorized",
 		};
 	}
 
 	const chat = await db.select().from(chats).where(eq(chats.id, id)).get();
-	if (!chat || chat.userId !== session.user.id) {
+	if (!chat || chat.userId !== session.properties.userId) {
 		return {
 			error: "Something went wrong",
 		};
@@ -113,7 +106,7 @@ export async function getChat(chatId: string, userId?: string) {
 export async function clearChats() {
 	const session = await auth();
 
-	if (!session?.user?.id) {
+	if (session.type !== "user") {
 		return {
 			error: "Unauthorized",
 		};
@@ -122,14 +115,17 @@ export async function clearChats() {
 	const found = await db
 		.select()
 		.from(chats)
-		.where(eq(chats.userId, session.user.id))
+		.where(eq(chats.userId, session.properties.userId))
 		.all();
 
 	if (!found.length) {
 		return redirect("/");
 	}
 
-	await db.delete(chats).where(eq(chats.userId, session.user.id)).run();
+	await db
+		.delete(chats)
+		.where(eq(chats.userId, session.properties.userId))
+		.run();
 
 	revalidatePath("/");
 	return redirect("/");
@@ -146,8 +142,7 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
 
 	const chat = await db.select().from(chats).where(eq(chats.id, id)).get();
 	const userId = chat?.userId;
-
-	if (userId !== session?.user?.id) {
+	if (session.type !== "user" || userId !== session.properties.userId) {
 		return {
 			error: "Unauthorized",
 		};

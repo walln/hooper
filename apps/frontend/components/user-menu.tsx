@@ -1,4 +1,4 @@
-import { signOut } from "@/auth";
+import { signout } from "@/app/(auth)/actions";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -7,10 +7,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Session } from "next-auth";
 
 export interface UserMenuProps {
-	user: Session["user"];
+	user?: {
+		email: string;
+	};
 }
 
 function getUserInitials(name: string) {
@@ -40,7 +41,7 @@ export function UserMenu({ user }: UserMenuProps) {
 					<form
 						action={async () => {
 							"use server";
-							await signOut({ redirectTo: "/" });
+							await signout();
 						}}
 					>
 						<button

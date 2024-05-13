@@ -6,8 +6,8 @@ import { EmptyScreen } from "@/components/chat/empty-screen";
 import type { Message } from "@/lib/chat/actions";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
-import type { Session } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import type { auth } from "@hooper/auth/next-client";
 import { useAIState, useUIState } from "ai/rsc";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,17 +16,10 @@ import { toast } from "sonner";
 export interface ChatProps extends React.ComponentProps<"div"> {
 	initialMessages?: Message[];
 	id?: string;
-	session?: Session;
-	missingKeys: string[];
+	session: Awaited<ReturnType<typeof auth>>;
 }
 
-export function Chat({
-	id,
-	className,
-	session,
-	missingKeys,
-	title,
-}: ChatProps) {
+export function Chat({ id, className, session, title }: ChatProps) {
 	const router = useRouter();
 	const path = usePathname();
 	const [input, setInput] = useState("");
@@ -36,12 +29,12 @@ export function Chat({
 	const [_, setNewChatId] = useLocalStorage("newChatId", id);
 
 	useEffect(() => {
-		if (session?.user) {
+		if (session.type === "user") {
 			if (!path.includes("chat") && messages.length === 1) {
 				window.history.replaceState({}, "", `/chat/${id}`);
 			}
 		}
-	}, [id, path, session?.user, messages]);
+	}, [id, path, session, messages]);
 
 	useEffect(() => {
 		const messagesLength = aiState.messages?.length;
@@ -53,12 +46,6 @@ export function Chat({
 	useEffect(() => {
 		setNewChatId(id);
 	});
-
-	useEffect(() => {
-		missingKeys.map((key) => {
-			toast.error(`Missing ${key} environment variable!`);
-		});
-	}, [missingKeys]);
 
 	const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } =
 		useScrollAnchor();

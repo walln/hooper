@@ -1,12 +1,13 @@
 import { Separator } from "@/components/ui/separator";
 import type { UIState } from "@/lib/chat/actions";
 import type { Session } from "@/lib/types";
+import type { auth } from "@hooper/auth/next-client";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export interface ChatList {
 	messages: UIState;
-	session?: Session;
+	session?: Awaited<ReturnType<typeof auth>>;
 	isShared: boolean;
 }
 

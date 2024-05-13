@@ -1,9 +1,15 @@
 import { getAuthLinks } from "@/components/auth/auth-links";
-import { LoginForm } from "@/components/auth/login-form";
+import { CodeSubmitForm } from "@/components/auth/code-submit-form";
 import { auth } from "@hooper/auth/next-client";
 import { redirect } from "next/navigation";
 
-export default async function LoginPage() {
+export default async function LoginCodePage({
+	searchParams,
+}: {
+	searchParams: {
+		error?: string;
+	};
+}) {
 	const session = await auth();
 
 	const authLinks = getAuthLinks();
@@ -14,7 +20,10 @@ export default async function LoginPage() {
 
 	return (
 		<main className="flex flex-col p-4">
-			<LoginForm codeAuthLink={authLinks.codeAuthLink} />
+			<CodeSubmitForm
+				codeVerifyLink={authLinks.codeVerifyLink}
+				error={searchParams.error}
+			/>
 		</main>
 	);
 }

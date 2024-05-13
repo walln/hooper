@@ -1,6 +1,5 @@
 import "server-only";
 
-import { auth } from "@/auth";
 import { News, NewsSkeleton } from "@/components/chat/cards/bot-news-card";
 import {
 	Scores,
@@ -16,7 +15,8 @@ import {
 import { saveChat } from "@/lib/actions";
 import { checkRateLimit } from "@/lib/rate-limit";
 import type { Chat } from "@/lib/types";
-import { nanoid, sleep } from "@/lib/utils";
+import { nanoid } from "@/lib/utils";
+import { auth } from "@hooper/auth/next-client";
 import {
 	NBANewsSchema,
 	NBAScoresSchema,
@@ -25,7 +25,6 @@ import {
 } from "@hooper/core/espn";
 import {
 	createAI,
-	createStreamableUI,
 	createStreamableValue,
 	getAIState,
 	getMutableAIState,
@@ -244,7 +243,7 @@ export const AI = createAI<AIState, UIState>({
 
 		const session = await auth();
 
-		if (session?.user) {
+		if (session.type === "user") {
 			const aiState = getAIState();
 
 			if (aiState) {
@@ -260,11 +259,11 @@ export const AI = createAI<AIState, UIState>({
 
 		const session = await auth();
 
-		if (session?.user) {
+		if (session.type === "user") {
 			const { chatId, messages } = state;
 
 			const createdAt = new Date();
-			const userId = session.user.id as string;
+			const userId = session.properties.userId as string;
 			const path = `/chat/${chatId}`;
 			const title = messages[0].content.substring(0, 100);
 
