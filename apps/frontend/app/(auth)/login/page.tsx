@@ -1,5 +1,5 @@
-import { getAuthLinks } from "@/components/auth/auth-links";
-import { LoginForm } from "@/components/auth/login-form";
+import { AuthForm } from "@/components/auth/login-form";
+import { getAuthLinks } from "@/lib/auth";
 import { auth } from "@hooper/auth/next-client";
 import { redirect } from "next/navigation";
 
@@ -13,8 +13,8 @@ export default async function LoginPage() {
 	}
 
 	return (
-		<main className="flex flex-col p-4">
-			<LoginForm codeAuthLink={authLinks.codeAuthLink} />
+		<main className="flex flex-col p-4 flex-grow justify-center items-center">
+			<AuthForm codeAuthLink={authLinks.codeAuthLink} />
 		</main>
 	);
 }

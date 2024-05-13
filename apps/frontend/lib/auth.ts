@@ -1,9 +1,8 @@
 import { headers } from "next/headers";
+import { Resource } from "sst";
 
 export function getAuthLinks() {
 	const siteUrl = headers().get("x-host-url") || "http://localhost:3000";
-
-	// const authUrl = Resource.AuthURL.value;
 
 	const params = new URLSearchParams({
 		client_id: "web",
@@ -12,10 +11,10 @@ export function getAuthLinks() {
 	});
 
 	const codeAuthLink = `${
-		process.env.AUTH_URL
+		Resource.AuthAuthenticator.url
 	}/code/authorize?${params.toString()}`;
 
-	const codeVerifyLink = `${process.env.AUTH_URL}/code/callback`;
+	const codeVerifyLink = `${Resource.AuthAuthenticator.url}/code/callback`;
 
 	return {
 		codeAuthLink,
