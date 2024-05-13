@@ -1,4 +1,4 @@
-import { signOut } from "@/auth";
+import { signout } from "@/app/(auth)/actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ export function SignOut(props: React.ComponentPropsWithRef<typeof Button>) {
 		<form
 			action={async () => {
 				"use server";
-				await signOut({ redirectTo: "/" });
+				await signout();
 			}}
 			className="w-full"
 		>

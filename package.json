@@ -36,6 +36,7 @@
 	"workspaces": [
 		"packages/core",
 		"packages/db",
+		"packages/auth",
 		"apps/frontend",
 		"tooling/biome",
 		"tooling/typescript-config"

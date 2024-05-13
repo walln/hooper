@@ -17,7 +17,6 @@ export function SidebarItems({ chats }: SidebarItemsProps) {
 		<AnimatePresence>
 			{chats.map(
 				(chat, index) =>
-					// biome-ignore lint/correctness/useJsxKeyInIterable: motion.div key not detected by biome
 					chat && (
 						<motion.div
 							key={chat?.id}

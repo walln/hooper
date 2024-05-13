@@ -1,0 +1,25 @@
+{
+	"name": "@hooper/auth",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Authentication for hooper.",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		"./api-client": "./src/client/api.ts",
+		"./next-client": "./src/client/next.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hooper/db": "workspace:*",
+		"drizzle-orm": "^0.30.10",
+		"next": "^14.2.3",
+		"ts-pattern": "^5.1.1",
+		"zod": "^3.22.4"
+	},
+	"devDependencies": {
+		"@hooper/tsconfig": "workspace:*"
+	}
+}

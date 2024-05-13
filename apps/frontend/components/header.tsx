@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
-import { SignIn, SignOut } from "@/components/auth/auth-buttons";
 import { ChatHistory } from "@/components/chat/chat-history";
 import { SidebarMobile } from "@/components/chat/sidebar/sidebar-mobile";
 import { SidebarToggle } from "@/components/chat/sidebar/sidebar-toggle";
@@ -14,16 +12,17 @@ import {
 	IconSparkles,
 } from "@/components/ui/icons";
 import { UserMenu } from "@/components/user-menu";
+import { auth } from "@hooper/auth/next-client";
 import React from "react";
 
 async function UserOrLogin() {
 	const session = await auth();
 	return (
 		<>
-			{session?.user ? (
+			{session?.type === "user" ? (
 				<>
 					<SidebarMobile>
-						<ChatHistory userId={session.user.id} />
+						<ChatHistory userId={session.properties.userId} />
 					</SidebarMobile>
 					<SidebarToggle />
 				</>
@@ -35,8 +34,8 @@ async function UserOrLogin() {
 			)}
 			<div className="flex items-center">
 				<IconSeparator className="size-6 text-muted-foreground/50" />
-				{session?.user ? (
-					<UserMenu user={session.user} />
+				{session?.type === "user" ? (
+					<UserMenu user={session.properties} />
 				) : (
 					<Button variant="link" asChild className="-ml-2">
 						<Link href="/login">Login</Link>
@@ -72,7 +71,6 @@ export async function Header() {
 					<UserOrLogin />
 				</React.Suspense>
 
-				{/* {session?.user ? <SignOut /> : <SignIn />} */}
 				<Button variant="outline" asChild>
 					<a
 						target="_blank"

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@hooper/auth/next-client";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { headers } from "next/headers";
@@ -36,8 +36,8 @@ const ratelimit = {
 export async function checkRateLimit() {
 	const ip = headers().get("x-forwarded-for") || "localhost";
 	const session = await auth();
-	if (session?.user?.id) {
-		const identifier = `ratelimit_${session.user.id}`;
+	if (session.type === "user") {
+		const identifier = `ratelimit_${session.properties.userId}`;
 		const { success } = await ratelimit.authenticated.limit(identifier);
 		return success;
 	}

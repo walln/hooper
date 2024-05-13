@@ -1,12 +1,11 @@
-import { auth } from "@/auth";
 import { SignupForm } from "@/components/auth/signup-form";
-import type { Session } from "@/lib/types";
+import { auth } from "@hooper/auth/next-client";
 import { redirect } from "next/navigation";
 
 export default async function SignupPage() {
-	const session = (await auth()) as Session;
+	const session = await auth();
 
-	if (session) {
+	if (session.type === "user") {
 		redirect("/");
 	}
 
