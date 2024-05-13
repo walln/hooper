@@ -7,6 +7,11 @@ declare module "sst" {
       publicKey: string
       type: "sst.aws.Auth"
     }
+    AuthAuthenticator: {
+      name: string
+      type: "sst.aws.Function"
+      url: string
+    }
     AuthSecret: {
       type: "sst.sst.Secret"
       value: string

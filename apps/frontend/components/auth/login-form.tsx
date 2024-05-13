@@ -1,7 +1,15 @@
 "use client";
 
-import { FormSchema } from "@/app/(auth)/signup/schema";
+import { AuthFormSchema } from "@/app/(auth)/schema";
 import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -13,59 +21,62 @@ import {
 } from "@/components/ui/form";
 import { IconSpinner } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
+import type { getAuthLinks } from "@/lib/auth";
 import { useForm } from "@/lib/hooks/use-form";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useFormStatus } from "react-dom";
+import { useState } from "react";
 import type { z } from "zod";
-import type { getAuthLinks } from "./auth-links";
 
-interface LoginFormProps
+interface AuthFormProps
 	extends Pick<ReturnType<typeof getAuthLinks>, "codeAuthLink"> {}
 
-export function LoginForm(props: LoginFormProps) {
+export function AuthForm(props: AuthFormProps) {
 	const router = useRouter();
-	const { pending } = useFormStatus();
-	const form = useForm(FormSchema);
+	const form = useForm(AuthFormSchema);
 
-	async function onSubmit(data: z.infer<typeof FormSchema>) {
+	const [loading, setLoading] = useState(false);
+
+	async function onSubmit(data: z.infer<typeof AuthFormSchema>) {
+		setLoading(true);
 		router.push(`${props.codeAuthLink}&email=${data.email}`);
+		setLoading(false);
 	}
 
 	return (
-		<Form {...form}>
-			<div className="flex flex-col items-center gap-4 space-y-3">
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-full flex-1 rounded-lg border bg-white px-6 pb-4 pt-8 shadow-md md:w-96 dark:bg-zinc-950"
-				>
-					{/* TODO: Typography component */}
-					Login
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Email</FormLabel>
-								<FormControl>
-									<Input placeholder="Enter Email" type="email" {...field} />
-								</FormControl>
-								<FormDescription>Enter your email address</FormDescription>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<Button type="submit" className="mt-2">
-						{pending ? <IconSpinner /> : "Create account"}
-					</Button>
+		<Card className="w-full max-w-sm">
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)}>
+					<CardHeader>
+						<CardTitle className="text-2xl">Login</CardTitle>
+						<CardDescription>
+							Enter your email below to login to get started
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<FormField
+							control={form.control}
+							name="email"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input placeholder="Enter Email" type="email" {...field} />
+									</FormControl>
+									<FormDescription>
+										A login code will be sent to your email
+									</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</CardContent>
+					<CardFooter>
+						<Button type="submit" className="w-full">
+							{loading ? <IconSpinner /> : "Continue"}
+						</Button>
+					</CardFooter>
 				</form>
-				<Link
-					href="/signup"
-					className="flex flex-row gap-1 text-sm text-zinc-400"
-				>
-					No account yet? <div className="font-semibold underline">Sign up</div>
-				</Link>
-			</div>
-		</Form>
+			</Form>
+		</Card>
 	);
 }

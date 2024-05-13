@@ -1,4 +1,5 @@
 import { cookies, headers } from "next/headers";
+import { Resource } from "sst";
 
 export async function GET(request: Request) {
 	// Get token and state from search params
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
 	formData.append("code", code);
 	formData.append("redirect_uri", new URL("/api/auth-callback", siteUrl).href);
 
-	const response = await fetch(`${process.env.AUTH_URL}/token`, {
+	const response = await fetch(`${Resource.AuthAuthenticator.url}/token`, {
 		method: "POST",
 		body: formData,
 	});
