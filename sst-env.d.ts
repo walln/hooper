@@ -12,11 +12,11 @@ declare module "sst" {
       type: "sst.aws.Function"
       url: string
     }
-    AuthSecret: {
+    OpenAiApiKey: {
       type: "sst.sst.Secret"
       value: string
     }
-    OpenAiApiKey: {
+    ResendApiKey: {
       type: "sst.sst.Secret"
       value: string
     }

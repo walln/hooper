@@ -1,3 +1,5 @@
+import { sendAuthCode } from "@hooper/email/client";
+import { Resource } from "sst";
 import { CodeAdapter } from "sst/auth/adapter";
 import { z } from "zod";
 import { webUrl } from "../server";
@@ -13,6 +15,14 @@ export const codeAdapter = CodeAdapter({
 		// TODO: Check if OTP already exists for email
 		console.log("code", code, claims);
 		// console.log("req", req);
+
+		const res = await sendAuthCode({
+			email: claims.email,
+			code,
+			resendAPIKey: Resource.ResendApiKey.value,
+		});
+
+		console.log("Authenication email id:", res.emailId);
 
 		return new Response("ok", {
 			status: 302,
