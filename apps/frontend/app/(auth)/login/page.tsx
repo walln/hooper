@@ -1,4 +1,4 @@
-import { AuthForm } from "@/components/auth/login-form";
+import { AuthForm } from "@/components/auth/auth-email-form";
 import { getAuthLinks } from "@/lib/auth";
 import { auth } from "@hooper/auth/next-client";
 import { redirect } from "next/navigation";

@@ -1,4 +1,4 @@
-import { CodeSubmitForm } from "@/components/auth/code-submit-form";
+import { CodeSubmitForm } from "@/components/auth/auth-code-form";
 import { getAuthLinks } from "@/lib/auth";
 import { auth } from "@hooper/auth/next-client";
 import { redirect } from "next/navigation";

@@ -6,9 +6,12 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint",
-		"db:push": "drizzle-kit push:sqlite",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"format": "biome format .",
+		"format:fix": "biome format --write . ",
+		"db:push": "drizzle-kit push:sqlite"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.3.4",

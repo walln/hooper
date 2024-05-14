@@ -1,7 +1,0 @@
-packages:
-  - "apps/**/*"
-  - "packages/**/*"
-  - "tooling/**/*"
-  # Exclude build artifacts that turbo is picking up
-  - "!**/.next/**"
-  - "!**/dist/**"

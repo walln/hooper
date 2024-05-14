@@ -21,24 +21,19 @@
 		"typescript": "^5"
 	},
 	"scripts": {
-		"commit": "git-cz",
-		"format:frontend": "biome format .",
-		"format:frontend:fix": "biome format --write .",
-		"lint:frontend": "biome lint apps/frontend",
-		"lint:frontend:fix": "biome lint --apply apps/frontend",
 		"prepare": "husky",
+		"commit": "git-cz",
+		"typecheck": "turbo typecheck",
+		"format": "turbo format",
+		"format:fix": "turbo format:fix",
+		"lint": "turbo lint",
+		"lint:fix": "turbo lint:fix",
 		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'"
 	},
 	"packageManager": "bun@1.1.6",
 	"dependencies": {
-		"sst": "ion"
+		"sst": "ion",
+		"turbo": "^1.13.3"
 	},
-	"workspaces": [
-		"packages/core",
-		"packages/db",
-		"packages/auth",
-		"apps/frontend",
-		"tooling/biome",
-		"tooling/typescript-config"
-	]
+	"workspaces": ["apps/*", "packages/*", "tooling/*"]
 }

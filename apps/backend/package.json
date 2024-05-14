@@ -1,5 +1,9 @@
 {
 	"name": "@hooper/backend",
 	"version": "0.1.0",
-	"private": true
+	"private": true,
+	"scripts": {
+		"lint": "rye lint",
+		"format": "rye format --check"
+	}
 }
