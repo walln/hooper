@@ -1,0 +1,15 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"lint": {},
+		"lint:fix": {
+			"cache": false
+		},
+		"format": {},
+		"format:fix": {
+			"cache": false
+		},
+		"typecheck": {}
+	},
+	"experimentalUI": true
+}

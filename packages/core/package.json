@@ -10,7 +10,11 @@
 		"./espn": "./src/espn.ts"
 	},
 	"scripts": {
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"format": "biome format .",
+		"format:fix": "biome format --write . "
 	},
 	"dependencies": {
 		"@hooper/db": "workspace:*",

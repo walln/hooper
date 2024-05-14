@@ -12,7 +12,11 @@
 	"scripts": {
 		"db:push": "drizzle-kit push:sqlite",
 		"db:studio": "drizzle-kit studio",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"format": "biome format .",
+		"format:fix": "biome format --write . "
 	},
 	"dependencies": {
 		"@libsql/client": "^0.6.0",

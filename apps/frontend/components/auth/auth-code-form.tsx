@@ -17,12 +17,12 @@ import {
 	InputOTPGroup,
 	InputOTPSlot,
 } from "@/components/ui/input-otp";
+import type { getAuthLinks } from "@/lib/auth";
 import { useForm } from "@/lib/hooks/use-form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { z } from "zod";
-import type { getAuthLinks } from "./auth-links";
 
 interface CodeSubmitProps
 	extends Pick<ReturnType<typeof getAuthLinks>, "codeVerifyLink"> {
