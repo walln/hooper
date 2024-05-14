@@ -17,7 +17,7 @@ export default $config({
 		const TURSO_URL = new sst.Secret("TursoURL", "file:local.db");
 		const TURSO_TOKEN = new sst.Secret("TursoToken");
 		const OPENAI_API_KEY = new sst.Secret("OpenAiApiKey");
-		const AUTH_SECRET = new sst.Secret("AuthSecret");
+		const RESEND_API_KEY = new sst.Secret("ResendApiKey");
 
 		const appDomain = $interpolate`${
 			$app.stage === "production" ? "hooper" : `${$app.stage}.hooper`
@@ -31,9 +31,10 @@ export default $config({
 			authenticator: {
 				handler: "./packages/auth/src/server.handler",
 				url: true,
-				link: [TURSO_URL, TURSO_TOKEN],
+				link: [TURSO_URL, TURSO_TOKEN, RESEND_API_KEY],
 				environment: {
 					WEB_URL: $dev ? "http://localhost:3000" : appDomain,
+					DEVELOPMENT_EMAILS: !$dev,
 				},
 			},
 		});
@@ -60,7 +61,7 @@ export default $config({
 				TURSO_URL,
 				TURSO_TOKEN,
 				OPENAI_API_KEY,
-				AUTH_SECRET,
+				RESEND_API_KEY,
 			],
 		});
 

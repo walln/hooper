@@ -1,27 +1,25 @@
 {
-	"name": "@hooper/auth",
+	"name": "@hooper/email",
 	"version": "0.1.0",
 	"private": true,
-	"description": "Authentication for hooper.",
+	"description": "Emails for hooper.",
 	"sideEffects": false,
 	"type": "module",
 	"exports": {
-		"./api-client": "./src/client/api.ts",
-		"./next-client": "./src/client/next.ts"
+		"./client": "./src/client.tsx"
 	},
 	"scripts": {
 		"typecheck": "tsc --noEmit",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
-		"format:fix": "biome format --write . "
+		"format:fix": "biome format --write . ",
+		"dev": "email dev"
 	},
 	"dependencies": {
-		"@hooper/db": "workspace:*",
-		"@hooper/email": "workspace:*",
-		"drizzle-orm": "^0.30.10",
-		"next": "^14.2.3",
-		"ts-pattern": "^5.1.1",
+		"@react-email/components": "0.0.17",
+		"react-email": "2.1.2",
+		"resend": "^3.2.0",
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {

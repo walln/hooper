@@ -19,12 +19,16 @@ const app = AuthHandler({
 		auth: {
 			async error(error, req) {
 				// TODO: Redirect to error on signin page
-				return new Response("ok");
+				return new Response("ok", {
+					status: 302,
+					headers: {
+						Location: `${webUrl}/login-code?error=${error.message}`,
+					},
+				});
 			},
 			async allowClient(clientID, redirect, req) {
-				console.log("allowClient", clientID, redirect);
-
-				// TODO: Validate clientID and redirect
+				// TODO: Validate clientID and redirect better
+				if (clientID !== "web") return false;
 				return true;
 			},
 			async success(response, input, req) {

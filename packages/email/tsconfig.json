@@ -1,0 +1,7 @@
+{
+	"extends": ["@hooper/tsconfig/nextjs.json"],
+	"include": ["**/*.ts", "**/*.mjs", "**/*.tsx"],
+	"compilerOptions": {
+		"strict": false
+	}
+}

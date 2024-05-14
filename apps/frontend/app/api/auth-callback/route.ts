@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 	formData.append("code", code);
 	formData.append("redirect_uri", new URL("/api/auth-callback", siteUrl).href);
 
-	const response = await fetch(`${Resource.AuthAuthenticator.url}/token`, {
+	const response = await fetch(`${Resource.AuthAuthenticator.url}token`, {
 		method: "POST",
 		body: formData,
 	});
