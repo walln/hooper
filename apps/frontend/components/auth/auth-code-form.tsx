@@ -21,12 +21,12 @@ import { useForm } from "@/lib/hooks/use-form";
 import { Button } from "@hooper/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { z } from "zod";
 
 interface CodeSubmitProps
 	extends Pick<ReturnType<typeof getAuthLinks>, "codeVerifyLink"> {
-	error?: string;
+	error: string | undefined;
 }
 
 export function CodeSubmitForm(props: CodeSubmitProps) {

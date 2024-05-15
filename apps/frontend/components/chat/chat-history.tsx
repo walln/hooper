@@ -40,7 +40,7 @@ export async function ChatHistory({ userId }: ChatHistoryProps) {
 					</div>
 				}
 			>
-				<SidebarList userId={userId} />
+				{userId && <SidebarList userId={userId} />}
 			</React.Suspense>
 		</div>
 	);

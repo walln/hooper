@@ -43,6 +43,9 @@ export function ChatShareDialog({
 			copyToClipboard(url.toString());
 			onCopy();
 			toast.success("Share link copied to clipboard");
+
+			// explicit return to make typescript happy
+			return undefined;
 		},
 		[copyToClipboard, onCopy],
 	);

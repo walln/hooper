@@ -1,26 +1,36 @@
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import OpenAI from "openai";
+import { createOpenAI } from "@ai-sdk/openai";
+import {
+	type CoreMessage,
+	StreamData,
+	StreamingTextResponse,
+	streamText,
+} from "ai";
 import { Resource } from "sst";
 
-// Create an OpenAI API client (that's edge friendly!)
-const openai = new OpenAI({
+// Create an OpenAI API client
+const openai = createOpenAI({
 	apiKey: Resource.OpenAiApiKey.value,
 });
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-	const { messages } = await req.json();
+	const { messages } = (await req.json()) as { messages: Array<CoreMessage> };
 
-	// Ask OpenAI for a streaming chat completion given the prompt
-	const response = await openai.chat.completions.create({
-		model: "gpt-3.5-turbo",
-		stream: true,
+	const result = await streamText({
+		model: openai("gpt-3.5-turbo"),
 		messages,
 	});
 
-	// Convert the response into a friendly text-stream
-	const stream = OpenAIStream(response);
-	// Respond with the stream
-	return new StreamingTextResponse(stream);
+	const data = new StreamData();
+
+	// Convert response into a stream
+	const stream = result.toAIStream({
+		onFinal(_) {
+			data.close();
+		},
+	});
+
+	// Respond with stream
+	return new StreamingTextResponse(stream, {}, data);
 }

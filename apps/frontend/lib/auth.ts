@@ -1,6 +1,7 @@
 import { Resource } from "sst";
 
-export const siteUrl = process.env.WEB_URL;
+// biome-ignore lint/complexity/useLiteralKeys: type error
+export const siteUrl = process.env["WEB_URL"];
 
 export function getAuthLinks() {
 	const params = new URLSearchParams({

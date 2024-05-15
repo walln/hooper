@@ -3,15 +3,14 @@
 import { ChatList } from "@/components/chat/chat-list";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { EmptyScreen } from "@/components/chat/empty-screen";
-import type { Message } from "@/lib/chat/actions";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { cn } from "@/lib/utils";
 import type { auth } from "@hooper/auth/next-client";
+import type { Message } from "@hooper/db/schema";
 import { useAIState, useUIState } from "ai/rsc";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export interface ChatProps extends React.ComponentProps<"div"> {
 	initialMessages?: Message[];
@@ -68,14 +67,16 @@ export function Chat({ id, className, session, title }: ChatProps) {
 				)}
 				<div className="h-px w-full" ref={visibilityRef} />
 			</div>
-			<ChatPanel
-				id={id}
-				title={title}
-				input={input}
-				setInput={setInput}
-				isAtBottom={isAtBottom}
-				scrollToBottom={scrollToBottom}
-			/>
+			{id ? (
+				<ChatPanel
+					id={id}
+					title={title}
+					input={input}
+					setInput={setInput}
+					isAtBottom={isAtBottom}
+					scrollToBottom={scrollToBottom}
+				/>
+			) : null}
 		</div>
 	);
 }

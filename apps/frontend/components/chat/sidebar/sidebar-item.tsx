@@ -43,8 +43,8 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 					opacity: 1,
 				},
 			}}
-			initial={shouldAnimate ? "initial" : undefined}
-			animate={shouldAnimate ? "animate" : undefined}
+			initial={shouldAnimate ? "initial" : false}
+			animate={shouldAnimate ? "animate" : false}
 			transition={{
 				duration: 0.25,
 				ease: "easeIn",
@@ -93,8 +93,8 @@ export function SidebarItem({ index, chat, children }: SidebarItemProps) {
 											x: 0,
 										},
 									}}
-									initial={shouldAnimate ? "initial" : undefined}
-									animate={shouldAnimate ? "animate" : undefined}
+									initial={shouldAnimate ? "initial" : false}
+									animate={shouldAnimate ? "animate" : false}
 									transition={{
 										duration: 0.25,
 										ease: "easeIn",

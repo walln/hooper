@@ -49,6 +49,9 @@ export const useScrollAnchor = () => {
 				current.removeEventListener("scroll", handleScroll);
 			};
 		}
+
+		// explicitly return undefined to make typescript happy
+		return undefined;
 	}, []);
 
 	useEffect(() => {
@@ -74,6 +77,9 @@ export const useScrollAnchor = () => {
 				observer.disconnect();
 			};
 		}
+
+		// explicitly return undefined to make typescript happy
+		return undefined;
 	});
 
 	return {

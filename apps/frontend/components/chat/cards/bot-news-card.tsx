@@ -54,8 +54,9 @@ function NewsArticle({
 						<div className="space-y-3 flex flex-col">
 							<div className="overflow-hidden rounded-md">
 								<Image
-									src={article.images[0].url}
-									alt={article.images[0].caption ?? "Article image"}
+									// TODO: need actual placeholder image
+									src={article.images[0]?.url ?? "/images/placeholder.png"}
+									alt={article.images[0]?.caption ?? "Article image"}
 									width={width}
 									height={height}
 									className={cn(
