@@ -1,20 +1,22 @@
-import { headers } from "next/headers";
 import { Resource } from "sst";
 
-export function getAuthLinks() {
-	const siteUrl = headers().get("x-host-url") || "http://localhost:3000";
+export const siteUrl = process.env.WEB_URL;
 
+export function getAuthLinks() {
 	const params = new URLSearchParams({
 		client_id: "web",
-		redirect_uri: `${siteUrl}/api/auth-callback`,
+		redirect_uri: `${siteUrl}/api/auth/tokens`,
 		response_type: "code",
 	});
 
+	console.log("siteUrl", siteUrl);
+	console.log("Redirect URI", params.get("redirect_uri"));
+
 	const codeAuthLink = `${
 		Resource.AuthAuthenticator.url
-	}/code/authorize?${params.toString()}`;
+	}code/authorize?${params.toString()}`;
 
-	const codeVerifyLink = `${Resource.AuthAuthenticator.url}/code/callback`;
+	const codeVerifyLink = `${Resource.AuthAuthenticator.url}code/callback`;
 
 	return {
 		codeAuthLink,

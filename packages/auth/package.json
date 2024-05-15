@@ -20,6 +20,7 @@
 		"@hooper/db": "workspace:*",
 		"@hooper/email": "workspace:*",
 		"drizzle-orm": "^0.30.10",
+		"@libsql/client": "^0.6.0",
 		"next": "^14.2.3",
 		"ts-pattern": "^5.1.1",
 		"zod": "^3.22.4"
