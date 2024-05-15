@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ChatHistory } from "@/components/chat/chat-history";
 import { SidebarMobile } from "@/components/chat/sidebar/sidebar-mobile";
 import { SidebarToggle } from "@/components/chat/sidebar/sidebar-toggle";
-import { Button } from "@/components/ui/button";
 import {
 	IconGitHub,
 	IconHooper,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/icons";
 import { UserMenu } from "@/components/user-menu";
 import { auth } from "@hooper/auth/next-client";
+import { Button } from "@hooper/ui/button";
 import React from "react";
 
 async function UserOrLogin() {

@@ -1,7 +1,6 @@
 "use client";
 
 import { CodeSchema } from "@/app/(auth)/login-code/schema";
-import { Button } from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/input-otp";
 import type { getAuthLinks } from "@/lib/auth";
 import { useForm } from "@/lib/hooks/use-form";
+import { Button } from "@hooper/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

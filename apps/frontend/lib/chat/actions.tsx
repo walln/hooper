@@ -16,6 +16,7 @@ import { saveChat } from "@/lib/actions";
 import { checkRateLimit } from "@/lib/rate-limit";
 import type { Chat } from "@/lib/types";
 import { nanoid } from "@/lib/utils";
+import { createOpenAI } from "@ai-sdk/openai";
 import { auth } from "@hooper/auth/next-client";
 import {
 	NBANewsSchema,
@@ -23,36 +24,18 @@ import {
 	getNbaNews,
 	getNbaScores,
 } from "@hooper/core/espn";
+import type { Message } from "@hooper/db/schema";
 import {
 	createAI,
 	createStreamableValue,
 	getAIState,
 	getMutableAIState,
-	render,
+	streamUI,
 } from "ai/rsc";
-import OpenAI from "openai";
 import { Resource } from "sst";
-import { match } from "ts-pattern";
 import { z } from "zod";
 
-export type Message = {
-	role: "user" | "assistant" | "system" | "function" | "data" | "tool";
-	content: string;
-	id: string;
-	name?: string;
-};
-
-export type AIState = {
-	chatId: string;
-	messages: Message[];
-};
-
-export type UIState = {
-	id: string;
-	display: React.ReactNode;
-}[];
-
-const openai = new OpenAI({
+const openai = createOpenAI({
 	apiKey: Resource.OpenAiApiKey.value,
 });
 
@@ -68,11 +51,13 @@ async function submitUserMessage(content: string) {
 		};
 	}
 
-	const aiState = getMutableAIState<typeof AI>();
-	aiState.update({
-		...aiState.get(),
+	const history = getMutableAIState<typeof AI>();
+
+	// update the AI state with the new user message
+	history.update({
+		...history.get(),
 		messages: [
-			...aiState.get().messages,
+			...history.get().messages,
 			{
 				id: nanoid(),
 				role: "user",
@@ -84,9 +69,8 @@ async function submitUserMessage(content: string) {
 	let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
 	let textNode: undefined | React.ReactNode;
 
-	const ui = render({
-		provider: openai,
-		model: "gpt-3.5-turbo",
+	const result = await streamUI({
+		model: openai("gpt-3.5-turbo"),
 		initial: <SpinnerMessage />,
 		messages: [
 			{
@@ -98,7 +82,7 @@ Today's date is ${new Date().toLocaleDateString()}
 `,
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: TODO: use ChatCompletion union types
-			...aiState.get().messages.map((info: any) => ({
+			...history.get().messages.map((info: any) => ({
 				role: info.role,
 				content: info.content,
 				name: info.name,
@@ -112,10 +96,10 @@ Today's date is ${new Date().toLocaleDateString()}
 
 			if (done) {
 				textStream.done();
-				aiState.done({
-					...aiState.get(),
+				history.done({
+					...history.get(),
 					messages: [
-						...aiState.get().messages,
+						...history.get().messages,
 						{
 							id: nanoid(),
 							role: "assistant",
@@ -130,44 +114,91 @@ Today's date is ${new Date().toLocaleDateString()}
 			return textNode;
 		},
 		temperature: 0,
-		functions: {
+		tools: {
 			getNews: {
 				description: "Get the latest NBA news",
 				parameters: z.object({
 					query: z.string().optional().describe("The search query"),
 				}),
-				render: async function* ({ query }) {
+				generate: async function* ({ query }) {
 					yield <NewsSkeleton />;
+
+					const toolCallId = nanoid();
 
 					try {
 						// TODO: sort based on search query
 						const articles = await getNbaNews();
-						aiState.done({
-							...aiState.get(),
+						history.done({
+							...history.get(),
 							messages: [
-								...aiState.get().messages,
+								...history.get().messages,
 								{
 									id: nanoid(),
-									role: "function",
-									name: "getNews",
-									content: JSON.stringify(articles),
+									role: "assistant",
+									content: [
+										{
+											type: "tool-call",
+											toolName: "getNews",
+											toolCallId,
+											args: { query },
+										},
+									],
+								},
+								{
+									id: nanoid(),
+									role: "tool",
+									content: [
+										{
+											type: "tool-result",
+											toolName: "getNews",
+											toolCallId,
+											result: articles,
+										},
+									],
 								},
 							],
 						});
-						<BotCard>
-							<News news={articles} />
-						</BotCard>;
+						return (
+							<BotCard>
+								<News news={articles} />
+							</BotCard>
+						);
 					} catch (error) {
 						console.error(error);
-						aiState.done({
-							...aiState.get(),
+						history.done({
+							...history.get(),
 							messages: [
-								...aiState.get().messages,
+								// ...history.get().messages,
+								// {
+								// 	id: nanoid(),
+								// 	role: "function",
+								// 	name: "getNews",
+								// 	content: "Failed to get news.",
+								// },
+								...history.get().messages,
 								{
 									id: nanoid(),
-									role: "function",
-									name: "getNews",
-									content: "Failed to get news.",
+									role: "assistant",
+									content: [
+										{
+											type: "tool-call",
+											toolName: "getNews",
+											toolCallId,
+											args: { query },
+										},
+									],
+								},
+								{
+									id: nanoid(),
+									role: "tool",
+									content: [
+										{
+											type: "tool-result",
+											toolName: "getNews",
+											toolCallId,
+											result: JSON.stringify(error),
+										},
+									],
 								},
 							],
 						});
@@ -180,22 +211,42 @@ Today's date is ${new Date().toLocaleDateString()}
 				parameters: z.object({
 					date: z.date().describe("The date to get scores for"),
 				}),
-				render: async function* ({ date }) {
+				generate: async function* ({ date }) {
 					yield <BotMessage content={`Searching for scores on ${date}...`} />;
 					yield <ScoresSkeleton />;
+
+					const toolCallId = nanoid();
 
 					try {
 						console.log("Getting scores for", new Date(date));
 						const response = await getNbaScores(new Date(date));
-						aiState.done({
-							...aiState.get(),
+						history.done({
+							...history.get(),
 							messages: [
-								...aiState.get().messages,
+								...history.get().messages,
 								{
 									id: nanoid(),
-									role: "function",
-									name: "getScores",
-									content: JSON.stringify(response),
+									role: "assistant",
+									content: [
+										{
+											type: "tool-call",
+											toolName: "getScores",
+											toolCallId,
+											args: { date },
+										},
+									],
+								},
+								{
+									id: nanoid(),
+									role: "tool",
+									content: [
+										{
+											type: "tool-result",
+											toolName: "getScores",
+											toolCallId,
+											result: response,
+										},
+									],
 								},
 							],
 						});
@@ -206,15 +257,33 @@ Today's date is ${new Date().toLocaleDateString()}
 						);
 					} catch (error) {
 						console.error(error);
-						aiState.done({
-							...aiState.get(),
+						history.done({
+							...history.get(),
 							messages: [
-								...aiState.get().messages,
+								...history.get().messages,
 								{
 									id: nanoid(),
-									role: "function",
-									name: "getScores",
-									content: "Failed to get scores.",
+									role: "assistant",
+									content: [
+										{
+											type: "tool-call",
+											toolName: "getScores",
+											toolCallId,
+											args: { date },
+										},
+									],
+								},
+								{
+									id: nanoid(),
+									role: "tool",
+									content: [
+										{
+											type: "tool-result",
+											toolName: "getScores",
+											toolCallId,
+											result: JSON.stringify(error),
+										},
+									],
 								},
 							],
 						});
@@ -226,12 +295,21 @@ Today's date is ${new Date().toLocaleDateString()}
 	});
 
 	return {
-		id: Date.now(),
-		display: ui,
+		id: nanoid(),
+		display: result.value,
 	};
 }
 
-// AI is a provider you wrap your application with so you can access AI and UI state in your components.
+export type AIState = {
+	chatId: string;
+	messages: Message[];
+};
+
+export type UIState = {
+	id: string;
+	display: React.ReactNode;
+}[];
+
 export const AI = createAI<AIState, UIState>({
 	actions: {
 		submitUserMessage,
@@ -244,17 +322,16 @@ export const AI = createAI<AIState, UIState>({
 		const session = await auth();
 
 		if (session.type === "user") {
-			const aiState = getAIState();
+			const history = getAIState();
 
-			if (aiState) {
-				const uiState = getUIStateFromAIState(aiState);
+			if (history) {
+				const uiState = getUIStateFromAIState(history);
 				return uiState;
 			}
-		} else {
-			return;
 		}
+		return;
 	},
-	onSetAIState: async ({ state, done }) => {
+	onSetAIState: async ({ state }) => {
 		"use server";
 
 		const session = await auth();
@@ -265,11 +342,13 @@ export const AI = createAI<AIState, UIState>({
 			const createdAt = new Date();
 			const userId = session.properties.userId as string;
 			const path = `/chat/${chatId}`;
-			const title = messages[0].content.substring(0, 100);
+
+			const firstMessageContent = messages[0]?.content as string;
+			const title = firstMessageContent.substring(0, 100);
 
 			const chat: Chat = {
 				id: chatId,
-				title,
+				title: title,
 				userId,
 				createdAt,
 				messages,
@@ -284,54 +363,107 @@ export const AI = createAI<AIState, UIState>({
 	},
 });
 
-export const getUIStateFromAIState = (aiState: Chat) => {
-	function getDisplay(message: Message): JSX.Element | null {
-		return match(message.role)
-			.with("function", () => {
-				if (message.name === "getNews") {
-					try {
-						const data = JSON.parse(message.content);
-						const news = NBANewsSchema.parse(data);
-						return (
-							<BotCard>
-								<News news={news} />
-							</BotCard>
-						);
-					} catch (err) {
-						console.error("Failed to parse articles...", err);
-						return <BotErrorMessage content={"Failed to parse articles..."} />;
-					}
-				}
-
-				if (message.name === "getScores") {
-					try {
-						const data = JSON.parse(message.content);
-						const scores = NBAScoresSchema.parse(data);
-						return (
-							<BotCard>
-								<Scores scores={scores} />
-							</BotCard>
-						);
-					} catch (err) {
-						console.error("Failed to parse scores...", err);
-						return <BotErrorMessage content={"Failed to parse scores..."} />;
-					}
-				}
-
-				return null;
-			})
-			.with("user", () => <UserMessage>{message.content}</UserMessage>)
-			.with("assistant", () => <BotMessage content={message.content} />)
-			.with("data", () => null)
-			.with("tool", () => null)
-			.with("system", () => null)
-			.exhaustive();
-	}
-
-	return aiState.messages
+const getUIStateFromAIState = (history: Chat) => {
+	return history.messages
 		.filter((message) => message.role !== "system")
 		.map((message, index) => ({
-			id: `${aiState.id}-${index}`,
-			display: getDisplay(message),
+			id: `${history.id}-${index}`,
+			display:
+				message.role === "tool" ? (
+					message.content.map((tool) => {
+						if (tool.toolName === "getNews") {
+							const news = NBANewsSchema.parse(tool.result);
+							return (
+								<BotCard>
+									<News news={news} />
+								</BotCard>
+							);
+						}
+
+						if (tool.toolName === "getScores") {
+							const scores = NBAScoresSchema.parse(tool.result);
+							return (
+								<BotCard>
+									<Scores scores={scores} />
+								</BotCard>
+							);
+						}
+
+						return null;
+					})
+				) : message.role === "user" ? (
+					<UserMessage>{message.content as string}</UserMessage>
+				) : message.role === "assistant" &&
+					typeof message.content === "string" ? (
+					<BotMessage content={message.content} />
+				) : null,
 		}));
 };
+
+// const renderToolResult = (toolName: string, toolCallId: string, result: unknown) {
+
+// }
+
+// const renderAssistantResult = (message: Message) => {
+// 	if (
+// 		typeof message.content !== "string" &&
+// 		message.content.type === "tool-call"
+// 	) {
+// 		const { toolName, toolCallId, args } = message.content;
+// 	}
+// };
+
+// export const getUIStateFromAIState = (aiState: Chat) => {
+// 	function getDisplay(message: Message): JSX.Element | null {
+// 		return match(message.role)
+// 			.with("tool", () => {
+// 				if (message.content.type === "tool-result") {
+// 					const { toolName, toolCallId, result } = message.content;
+// 					return renderToolResult(toolName, toolCallId, result);
+// 				}
+
+// 				if (message.content.type === "getNews") {
+// 					try {
+// 						const data = JSON.parse(message.content);
+// 						const news = NBANewsSchema.parse(data);
+// 						return (
+// 							<BotCard>
+// 								<News news={news} />
+// 							</BotCard>
+// 						);
+// 					} catch (err) {
+// 						console.error("Failed to parse articles...", err);
+// 						return <BotErrorMessage content={"Failed to parse articles..."} />;
+// 					}
+// 				}
+
+// 				if (message.name === "getScores") {
+// 					try {
+// 						const data = JSON.parse(message.content);
+// 						const scores = NBAScoresSchema.parse(data);
+// 						return (
+// 							<BotCard>
+// 								<Scores scores={scores} />
+// 							</BotCard>
+// 						);
+// 					} catch (err) {
+// 						console.error("Failed to parse scores...", err);
+// 						return <BotErrorMessage content={"Failed to parse scores..."} />;
+// 					}
+// 				}
+
+// 				return null;
+// 			})
+// 			.with("user", () => <UserMessage>{message.content}</UserMessage>)
+// 			.with("assistant", () => <BotMessage content={message.content} />)
+// 			.with("system", () => null)
+// 			.exhaustive();
+// 	}
+
+// 	return aiState.messages
+// 		.filter((message) => message.role !== "system")
+// 		.map((message, index) => ({
+// 			id: `${aiState.id}-${index}`,
+// 			display: getDisplay(message),
+// 		}));
+// };

@@ -3,8 +3,8 @@
 import { useTheme } from "next-themes";
 import * as React from "react";
 
-import { Button } from "@/components/ui/button";
 import { IconMoon, IconSun } from "@/components/ui/icons";
+import { Button } from "@hooper/ui/button";
 
 export function ThemeToggle() {
 	const { setTheme, theme } = useTheme();

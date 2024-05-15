@@ -15,9 +15,9 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { IconSpinner } from "@/components/ui/icons";
 import type { ServerActionResult } from "@/lib/types";
+import { Button } from "@hooper/ui/button";
 
 interface ClearHistoryProps {
 	isEnabled: boolean;

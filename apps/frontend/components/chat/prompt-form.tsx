@@ -5,7 +5,6 @@ import Textarea from "react-textarea-autosize";
 
 import { useActions, useUIState } from "ai/rsc";
 
-import { Button } from "@/components/ui/button";
 import { IconArrowElbow, IconPlus } from "@/components/ui/icons";
 import {
 	Tooltip,
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/tooltip";
 import type { AI } from "@/lib/chat/actions";
 import { useEnterSubmit } from "@/lib/hooks/use-enter-submit";
+import { Button } from "@hooper/ui/button";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { UserMessage } from "./message";

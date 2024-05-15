@@ -1,9 +1,9 @@
 "use client";
 
 import { Sidebar } from "@/components/chat/sidebar/sidebar";
-import { Button } from "@/components/ui/button";
 import { IconSidebar } from "@/components/ui/icons";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@hooper/ui/button";
 
 interface SidebarMobileProps {
 	children: React.ReactNode;
