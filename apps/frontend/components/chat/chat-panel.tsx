@@ -14,7 +14,7 @@ import { UserMessage } from "./message";
 
 export interface ChatPanelProps {
 	id?: string;
-	title?: string;
+	title: string | undefined;
 	input: string;
 	shared?: boolean;
 	setInput: (value: string) => void;

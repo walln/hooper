@@ -28,6 +28,7 @@ export async function createUser(email: string) {
 	}
 
 	const name = email.split("@")[0];
+	if (!name) throw new Error("Invalid email");
 
 	const user = await db.insert(users).values({
 		id: nanoid(),
@@ -41,11 +42,6 @@ export async function createUser(email: string) {
 		type: "success",
 		resultCode: ResultCode.UserCreated,
 	};
-}
-
-interface Result {
-	type: string;
-	resultCode: ResultCode;
 }
 
 export async function signout() {

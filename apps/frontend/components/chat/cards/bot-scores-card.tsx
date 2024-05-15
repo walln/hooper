@@ -43,7 +43,6 @@ function TeamLogo({
 
 function TeamCard({
 	team,
-	aspectRatio = "square",
 }: {
 	team: ScoresResponse["events"][number]["competitions"][number]["competitors"][number];
 	aspectRatio?: "portrait" | "square";
@@ -86,9 +85,12 @@ export function Scores({ scores }: { scores: ScoresResponse }) {
 	return (
 		<ScrollArea className="max-h-1/2 items-center justify-center bg-background">
 			<div className="flex flex-col items-center justify-center border h-full">
-				{scores.events.map((event) => (
-					<ScoreCard key={event.id} competition={event.competitions[0]} />
-				))}
+				{scores.events.map(
+					(event) =>
+						event.competitions[0] && (
+							<ScoreCard key={event.id} competition={event.competitions[0]} />
+						),
+				)}
 			</div>
 			<ScrollBar orientation="vertical" />
 		</ScrollArea>

@@ -363,7 +363,7 @@ export const AI = createAI<AIState, UIState>({
 	},
 });
 
-const getUIStateFromAIState = (history: Chat) => {
+export const getUIStateFromAIState = (history: Chat) => {
 	return history.messages
 		.filter((message) => message.role !== "system")
 		.map((message, index) => ({
@@ -399,71 +399,3 @@ const getUIStateFromAIState = (history: Chat) => {
 				) : null,
 		}));
 };
-
-// const renderToolResult = (toolName: string, toolCallId: string, result: unknown) {
-
-// }
-
-// const renderAssistantResult = (message: Message) => {
-// 	if (
-// 		typeof message.content !== "string" &&
-// 		message.content.type === "tool-call"
-// 	) {
-// 		const { toolName, toolCallId, args } = message.content;
-// 	}
-// };
-
-// export const getUIStateFromAIState = (aiState: Chat) => {
-// 	function getDisplay(message: Message): JSX.Element | null {
-// 		return match(message.role)
-// 			.with("tool", () => {
-// 				if (message.content.type === "tool-result") {
-// 					const { toolName, toolCallId, result } = message.content;
-// 					return renderToolResult(toolName, toolCallId, result);
-// 				}
-
-// 				if (message.content.type === "getNews") {
-// 					try {
-// 						const data = JSON.parse(message.content);
-// 						const news = NBANewsSchema.parse(data);
-// 						return (
-// 							<BotCard>
-// 								<News news={news} />
-// 							</BotCard>
-// 						);
-// 					} catch (err) {
-// 						console.error("Failed to parse articles...", err);
-// 						return <BotErrorMessage content={"Failed to parse articles..."} />;
-// 					}
-// 				}
-
-// 				if (message.name === "getScores") {
-// 					try {
-// 						const data = JSON.parse(message.content);
-// 						const scores = NBAScoresSchema.parse(data);
-// 						return (
-// 							<BotCard>
-// 								<Scores scores={scores} />
-// 							</BotCard>
-// 						);
-// 					} catch (err) {
-// 						console.error("Failed to parse scores...", err);
-// 						return <BotErrorMessage content={"Failed to parse scores..."} />;
-// 					}
-// 				}
-
-// 				return null;
-// 			})
-// 			.with("user", () => <UserMessage>{message.content}</UserMessage>)
-// 			.with("assistant", () => <BotMessage content={message.content} />)
-// 			.with("system", () => null)
-// 			.exhaustive();
-// 	}
-
-// 	return aiState.messages
-// 		.filter((message) => message.role !== "system")
-// 		.map((message, index) => ({
-// 			id: `${aiState.id}-${index}`,
-// 			display: getDisplay(message),
-// 		}));
-// };

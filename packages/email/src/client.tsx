@@ -2,7 +2,8 @@ import React from "react";
 import { Resend } from "resend";
 import { AuthenticationCodeEmail } from "../emails/auth-code";
 
-const shouldSendEmails = process.env.DEVELOPMENT_EMAILS === "true";
+// biome-ignore lint/complexity/useLiteralKeys: type error
+const shouldSendEmails = process.env["DEVELOPMENT_EMAILS"] === "true";
 
 export async function sendAuthCode({
 	email,
@@ -12,7 +13,8 @@ export async function sendAuthCode({
 	console.log(
 		"Should send emails",
 		shouldSendEmails,
-		process.env.DEVELOPMENT_EMAILS,
+		// biome-ignore lint/complexity/useLiteralKeys: type error
+		process.env["DEVELOPMENT_EMAILS"],
 	);
 
 	const resend = new Resend(resendAPIKey);

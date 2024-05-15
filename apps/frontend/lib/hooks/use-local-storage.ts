@@ -10,7 +10,7 @@ export const useLocalStorage = <T>(
 		// Retrieve from localStorage
 		const item = window.localStorage.getItem(key);
 		if (item) {
-			setStoredValue(JSON.parse(item));
+			setStoredValue(JSON.parse(item) as T);
 		}
 	}, [key]);
 

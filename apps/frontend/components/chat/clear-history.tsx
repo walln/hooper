@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -30,7 +29,6 @@ export function ClearHistory({
 }: ClearHistoryProps) {
 	const [open, setOpen] = React.useState(false);
 	const [isPending, startTransition] = React.useTransition();
-	const router = useRouter();
 
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>

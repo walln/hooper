@@ -4,8 +4,10 @@ import { Redis } from "@upstash/redis";
 import { headers } from "next/headers";
 
 function getEnv() {
-	const token = process.env.REDIS_TOKEN;
-	const endpoint = process.env.REDIS_ENDPOINT;
+	// biome-ignore lint/complexity/useLiteralKeys: type error
+	const token = process.env["REDIS_TOKEN"];
+	// biome-ignore lint/complexity/useLiteralKeys: type error
+	const endpoint = process.env["REDIS_ENDPOINT"];
 
 	if (!token || !endpoint) {
 		console.log(process.env);

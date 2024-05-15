@@ -1,22 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm as useRHForm } from "react-hook-form";
-import type { FieldErrors } from "react-hook-form";
+import type { UseFormProps } from "react-hook-form";
 import type { ZodType, z } from "zod";
 
 // biome-ignore lint/suspicious/noExplicitAny: Generic type magic
-export function useForm<T extends ZodType<any, any, any>>(
+export function useForm<T extends ZodType<any, any, any>, TContext = any>(
 	schema: T,
-	{
-		defaults,
-		errors,
-	}: {
-		defaults?: z.infer<T>;
-		errors?: FieldErrors<z.infer<T>>;
-	} = {},
+	props?: Partial<UseFormProps<T, TContext>>,
 ) {
-	return useRHForm<z.infer<typeof schema>>({
+	return useRHForm<z.infer<T>, TContext>({
 		resolver: zodResolver(schema),
-		defaultValues: defaults,
-		errors,
+		...props,
 	});
 }

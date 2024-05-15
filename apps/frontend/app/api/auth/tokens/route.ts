@@ -1,5 +1,5 @@
 import { siteUrl } from "@/lib/auth";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { Resource } from "sst";
 
@@ -40,7 +40,7 @@ export async function GET(request: Request) {
 			throw new Error("Non-OK HTTP status code");
 		}
 
-		const data = await response.json();
+		const data = (await response.json()) as { access_token: string };
 		const token = data.access_token;
 
 		const cookieStore = cookies();
