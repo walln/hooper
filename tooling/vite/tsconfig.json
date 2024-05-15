@@ -1,0 +1,12 @@
+{
+	"extends": ["@hooper/tsconfig/base.json"],
+	"compilerOptions": {
+		"tsBuildInfoFile": ".tsbuildinfo",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.cjs", "**/*.mjs"],
+	"exclude": ["dist", "node_modules"]
+}

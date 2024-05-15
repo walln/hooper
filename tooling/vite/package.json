@@ -1,0 +1,33 @@
+{
+	"name": "@hooper/vite",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Vite presets",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		"./react": {
+			"types": "./dist/react.d.ts",
+			"default": "./dist/react.js"
+		}
+	},
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"typecheck": "tsc --noEmit --tsBuildInfoFile .tsbuildinfo",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"format": "biome format .",
+		"format:fix": "biome format --write . "
+	},
+	"dependencies": {
+		"@vitejs/plugin-react": "^4.2.1",
+		"vite": "^5.2.11",
+		"vite-tsconfig-paths": "^4.3.2"
+	},
+	"devDependencies": {
+		"@hooper/tsconfig": "workspace:^",
+		"@types/node": "^20.12.11",
+		"tsup": "^8.0.2"
+	}
+}

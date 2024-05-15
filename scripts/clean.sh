@@ -3,6 +3,9 @@
 # Find and remove all node_modules directories
 find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 
+# remove bun lockfile
+rm bun.lockb
+
 # remove next build
 rm -rf 
 

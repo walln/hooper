@@ -28,7 +28,8 @@
 		"format:fix": "turbo format:fix",
 		"lint": "turbo lint",
 		"lint:fix": "turbo lint:fix",
-		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'"
+		"dev": "sst dev 'bun run --cwd apps/frontend/ dev'",
+		"storybook:dev": "turbo storybook"
 	},
 	"packageManager": "bun@1.1.6",
 	"dependencies": {

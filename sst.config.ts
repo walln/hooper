@@ -13,7 +13,6 @@ export default $config({
 		};
 	},
 	async run() {
-		const bucket = new sst.cloudflare.Bucket("MyBucket");
 		const TURSO_URL = new sst.Secret("TursoURL", "file:local.db");
 		const TURSO_TOKEN = new sst.Secret("TursoToken");
 		const OPENAI_API_KEY = new sst.Secret("OpenAiApiKey");
@@ -61,7 +60,6 @@ export default $config({
 					: $interpolate`https://${appDomain}`,
 			},
 			link: [
-				bucket,
 				auth,
 				auth.authenticator,
 				TURSO_URL,
@@ -74,7 +72,6 @@ export default $config({
 		return {
 			appUrl: web.url,
 			authUrl: auth.authenticator.url,
-			bucket: bucket.name,
 			web: web.url,
 		};
 	},

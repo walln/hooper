@@ -1,0 +1,32 @@
+{
+	"name": "@hooper/utils",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Common utilities for hooper",
+	"sideEffects": false,
+	"type": "module",
+	"exports": {
+		"./filesystem": {
+			"types": "./dist/filesystem.d.ts",
+			"default": "./dist/filesystem.js"
+		},
+		"./url": {
+			"types": "./dist/url.d.ts",
+			"default": "./dist/url.js"
+		}
+	},
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"typecheck": "tsc --noEmit --tsBuildInfoFile .tsbuildinfo",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --apply .",
+		"format": "biome format .",
+		"format:fix": "biome format --write . "
+	},
+	"devDependencies": {
+		"@hooper/tsconfig": "workspace:^",
+		"@types/node": "^20.12.11",
+		"tsup": "^8.0.2"
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"name": "@hooper/tsconfig",
+	"version": "0.0.0",
+	"private": true,
+	"description": "A package for sharing tsconfig files",
+	"main": "index.js",
+	"files": ["./base.json", "./next.json", "./react.json"]
+}
