@@ -11,7 +11,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { IconShare, IconSpinner, IconTrash } from "@/components/ui/icons";
 import {
 	Tooltip,
@@ -19,6 +18,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { Chat, ServerActionResult } from "@/lib/types";
+import { Button } from "@hooper/ui/button";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";

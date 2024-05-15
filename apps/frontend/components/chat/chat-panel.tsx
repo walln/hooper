@@ -4,10 +4,10 @@ import { ButtonScrollToBottom } from "@/components/chat/button-scroll-to-bottom"
 import { ChatShareDialog } from "@/components/chat/chat-share-dialog";
 import { PromptForm } from "@/components/chat/prompt-form";
 import { FooterText } from "@/components/footer";
-import { Button } from "@/components/ui/button";
 import { IconShare } from "@/components/ui/icons";
 import { shareChat } from "@/lib/actions";
 import type { AI } from "@/lib/chat/actions";
+import { Button } from "@hooper/ui/button";
 import { useAIState, useActions, useUIState } from "ai/rsc";
 import { nanoid } from "nanoid";
 import { UserMessage } from "./message";

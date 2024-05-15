@@ -1,7 +1,7 @@
 import { SidebarList } from "@/components/chat/sidebar/sidebar-list";
-import { buttonVariants } from "@/components/ui/button";
 import { IconPlus } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@hooper/ui/button";
 import Link from "next/link";
 import * as React from "react";
 

@@ -4,7 +4,6 @@ import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -16,6 +15,7 @@ import {
 import { IconSpinner } from "@/components/ui/icons";
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
 import type { Chat, ServerActionResult } from "@/lib/types";
+import { Button } from "@hooper/ui/button";
 
 interface ChatShareDialogProps extends DialogProps {
 	chat: Pick<Chat, "id" | "title" | "messages">;

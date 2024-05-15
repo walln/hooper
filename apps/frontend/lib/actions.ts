@@ -6,7 +6,6 @@ import { chats } from "@hooper/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { Resource } from "sst";
 import type { Chat, ServerActionResult } from "./types";
 
 export async function refreshHistory(path: string) {
