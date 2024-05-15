@@ -33,7 +33,9 @@ export default $config({
 				url: true,
 				link: [TURSO_URL, TURSO_TOKEN, RESEND_API_KEY],
 				environment: {
-					WEB_URL: $dev ? "http://localhost:3000" : appDomain,
+					WEB_URL: $dev
+						? "http://localhost:3000"
+						: $interpolate`https://${appDomain}`,
 					DEVELOPMENT_EMAILS: !$dev,
 				},
 			},
@@ -41,10 +43,11 @@ export default $config({
 
 		const redis = new upstash.RedisDatabase("Redis", {
 			region: "us-east-1",
-			databaseName: "hooper",
+			databaseName: $interpolate`hooper-${$app.stage}-redis`,
 		});
 
 		const web = new sst.aws.Nextjs("Web", {
+			path: "./apps/frontend",
 			domain: {
 				name: appDomain,
 				dns: dns,
@@ -53,6 +56,9 @@ export default $config({
 				REDIS_ENDPOINT: redis.endpoint,
 				REDIS_TOKEN: redis.restToken,
 				AUTH_URL: auth.authenticator.url,
+				WEB_URL: $dev
+					? "http://localhost:3000"
+					: $interpolate`https://${appDomain}`,
 			},
 			link: [
 				bucket,

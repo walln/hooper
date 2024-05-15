@@ -19,6 +19,7 @@ coverage
 .next
 build
 out
+.open-next
 
 # misc
 .DS_Store

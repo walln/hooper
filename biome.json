@@ -4,6 +4,7 @@
 		"ignore": [
 			"node_modules",
 			".next",
+			".open-next",
 			".turbo",
 			"dist",
 			".venv",
