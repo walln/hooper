@@ -1,0 +1,12 @@
+{
+	"extends": ["@hooper/tsconfig/react.json"],
+	"compilerOptions": {
+		"tsBuildInfoFile": ".tsbuildinfo",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", "**/*.cjs"],
+	"exclude": ["dist", "node_modules"]
+}

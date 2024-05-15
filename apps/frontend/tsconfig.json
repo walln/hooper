@@ -1,28 +1,18 @@
 {
-	"extends": "@hooper/tsconfig/nextjs.json",
+	"extends": ["@hooper/tsconfig/next.json"],
 	"compilerOptions": {
-		"tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"baseUrl": ".",
-		"declarationMap": false,
-		"declaration": false,
 		"paths": {
 			"@/*": ["./*"]
-		},
-		"strictNullChecks": true
+		}
 	},
 	"include": [
 		"next-env.d.ts",
-		"**/*.js",
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"next.config.cjs",
-		"postcss.config.cjs"
+		"**/*.js",
+		"**/*.cjs",
+		"**/*.mjs"
 	],
-	"exclude": ["node_modules", ".next"]
+	"exclude": ["node_modules", "playwright-report", "test-results"]
 }

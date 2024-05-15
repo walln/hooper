@@ -46,4 +46,7 @@ next-env.d.ts
 # turbo
 .turbo
 
+# tsup
+dist
+
 TODO.md

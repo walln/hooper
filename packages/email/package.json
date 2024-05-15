@@ -14,7 +14,7 @@
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
 		"format:fix": "biome format --write . ",
-		"dev": "email dev"
+		"preview": "email dev"
 	},
 	"dependencies": {
 		"@react-email/components": "0.0.17",

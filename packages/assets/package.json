@@ -1,0 +1,7 @@
+{
+	"name": "@hooper/assets",
+	"version": "0.1.4",
+	"private": true,
+	"description": "Hooper assets",
+	"files": ["**/*"]
+}
