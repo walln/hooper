@@ -22,9 +22,9 @@ export default $config({
 			$app.stage === "production" ? "hooper" : `${$app.stage}.hooper`
 		}.walln.dev`;
 
-		const dns = sst.vercel.dns({
-			domain: "walln.dev",
-		});
+		// const dns = sst.vercel.dns({
+		// 	domain: "walln.dev",
+		// });
 
 		const auth = new sst.aws.Auth("Auth", {
 			authenticator: {
@@ -47,10 +47,11 @@ export default $config({
 
 		const web = new sst.aws.Nextjs("Web", {
 			path: "./apps/frontend",
-			domain: {
-				name: appDomain,
-				dns: dns,
-			},
+			// TODO: Enable this when bug is fixed
+			// domain: {
+			// 	name: appDomain,
+			// 	dns: dns,
+			// },
 			environment: {
 				REDIS_ENDPOINT: redis.endpoint,
 				REDIS_TOKEN: redis.restToken,
