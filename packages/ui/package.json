@@ -18,10 +18,88 @@
 				"default": "./dist/primitives/button/index.js"
 			}
 		},
+		"./card": {
+			"import": {
+				"types": "./dist/primitives/card/index.d.ts",
+				"default": "./dist/primitives/card/index.js"
+			}
+		},
+		"./context-menu": {
+			"import": {
+				"types": "./dist/primitives/context-menu/index.d.ts",
+				"default": "./dist/primitives/context-menu/index.js"
+			}
+		},
+		"./dialog": {
+			"import": {
+				"types": "./dist/primitives/dialog/index.d.ts",
+				"default": "./dist/primitives/dialog/index.js"
+			}
+		},
+		"./dropdown-menu": {
+			"import": {
+				"types": "./dist/primitives/dropdown-menu/index.d.ts",
+				"default": "./dist/primitives/dropdown-menu/index.js"
+			}
+		},
+		"./form": {
+			"import": {
+				"types": "./dist/primitives/form/index.d.ts",
+				"default": "./dist/primitives/form/index.js"
+			}
+		},
+		"./input": {
+			"import": {
+				"types": "./dist/primitives/input/index.d.ts",
+				"default": "./dist/primitives/input/index.js"
+			}
+		},
 		"./input-otp": {
 			"import": {
 				"types": "./dist/primitives/input-otp/index.d.ts",
 				"default": "./dist/primitives/input-otp/index.js"
+			}
+		},
+		"./label": {
+			"import": {
+				"types": "./dist/primitives/label/index.d.ts",
+				"default": "./dist/primitives/label/index.js"
+			}
+		},
+		"./scroll-area": {
+			"import": {
+				"types": "./dist/primitives/scroll-area/index.d.ts",
+				"default": "./dist/primitives/scroll-area/index.js"
+			}
+		},
+		"./separator": {
+			"import": {
+				"types": "./dist/primitives/separator/index.d.ts",
+				"default": "./dist/primitives/separator/index.js"
+			}
+		},
+		"./sheet": {
+			"import": {
+				"types": "./dist/primitives/sheet/index.d.ts",
+				"default": "./dist/primitives/sheet/index.js"
+			}
+		},
+		"./sonner": {
+			"import": {
+				"types": "./dist/primitives/sonner/index.d.ts",
+				"default": "./dist/primitives/sonner/index.js"
+			}
+		},
+		"./switch": {
+			"import": {
+				"types": "./dist/primitives/switch/index.d.ts",
+				"default": "./dist/primitives/switch/index.js"
+			}
+		},
+		"./tooltip": {
+			"import": {
+				"types": "./dist/primitives/tooltip/index.d.ts",
+				"default": "./dist/primitives/tooltip/index.js"
 			}
 		},
 		"./typography": {
@@ -44,7 +122,7 @@
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
 		"format:fix": "biome format --write . ",
-		"build": "tsup",
+		"build": "NODE_OPTIONS='--max-old-space-size=16384' tsup",
 		"dev": "tsup --watch",
 		"storybook": "storybook dev -p 6006 --no-open",
 		"build-storybook": "storybook build",

@@ -1,6 +1,6 @@
-import { Separator } from "@/components/ui/separator";
 import type { UIState } from "@/lib/chat/actions";
 import type { auth } from "@hooper/auth/next-client";
+import { Separator } from "@hooper/ui/separator";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 

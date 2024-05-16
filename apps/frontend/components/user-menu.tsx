@@ -1,12 +1,12 @@
 import { signout } from "@/app/(auth)/actions";
+import { Button } from "@hooper/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@hooper/ui/button";
+} from "@hooper/ui/dropdown-menu";
 
 export interface UserMenuProps {
 	user?: {

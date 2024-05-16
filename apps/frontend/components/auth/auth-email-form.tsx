@@ -1,6 +1,10 @@
 "use client";
 
 import { AuthFormSchema } from "@/app/(auth)/schema";
+import { IconSpinner } from "@/components/ui/icons";
+import type { getAuthLinks } from "@/lib/auth";
+import { useForm } from "@/lib/hooks/use-form";
+import { Button } from "@hooper/ui/button";
 import {
 	Card,
 	CardContent,
@@ -8,7 +12,7 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
+} from "@hooper/ui/card";
 import {
 	Form,
 	FormControl,
@@ -17,12 +21,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/ui/form";
-import { IconSpinner } from "@/components/ui/icons";
-import { Input } from "@/components/ui/input";
-import type { getAuthLinks } from "@/lib/auth";
-import { useForm } from "@/lib/hooks/use-form";
-import { Button } from "@hooper/ui/button";
+} from "@hooper/ui/form";
+import { Input } from "@hooper/ui/input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { z } from "zod";

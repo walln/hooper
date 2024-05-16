@@ -1,8 +1,8 @@
 "use client";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { NBAScoresSchema } from "@hooper/core/espn";
+import { ScrollArea, ScrollBar } from "@hooper/ui/scroll-area";
 import Image from "next/image";
 import type { z } from "zod";
 

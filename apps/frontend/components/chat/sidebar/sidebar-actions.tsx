@@ -2,11 +2,6 @@
 
 import { ChatShareDialog } from "@/components/chat/chat-share-dialog";
 import { IconShare, IconSpinner, IconTrash } from "@/components/ui/icons";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 import type { Chat, ServerActionResult } from "@/lib/types";
 import {
 	AlertDialog,
@@ -19,6 +14,7 @@ import {
 	AlertDialogTitle,
 } from "@hooper/ui/alert-dialog";
 import { Button } from "@hooper/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@hooper/ui/tooltip";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
