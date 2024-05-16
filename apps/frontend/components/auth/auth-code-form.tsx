@@ -1,6 +1,10 @@
 "use client";
 
 import { CodeSchema } from "@/app/(auth)/login-code/schema";
+import { IconSpinner } from "@/components/ui/icons";
+import type { getAuthLinks } from "@/lib/auth";
+import { useForm } from "@/lib/hooks/use-form";
+import { Button } from "@hooper/ui/button";
 import {
 	Form,
 	FormControl,
@@ -9,16 +13,13 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/ui/form";
-import { IconSpinner } from "@/components/ui/icons";
+} from "@hooper/ui/form";
 import {
 	InputOTP,
 	InputOTPGroup,
+	InputOTPSeparator,
 	InputOTPSlot,
-} from "@/components/ui/input-otp";
-import type { getAuthLinks } from "@/lib/auth";
-import { useForm } from "@/lib/hooks/use-form";
-import { Button } from "@hooper/ui/button";
+} from "@hooper/ui/input-otp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -68,16 +69,27 @@ export function CodeSubmitForm(props: CodeSubmitProps) {
 							<FormItem>
 								<FormLabel>Code</FormLabel>
 								<FormControl>
-									<InputOTP maxLength={6} {...field}>
-										<InputOTPGroup>
-											<InputOTPSlot index={0} />
-											<InputOTPSlot index={1} />
-											<InputOTPSlot index={2} />
-											<InputOTPSlot index={3} />
-											<InputOTPSlot index={4} />
-											<InputOTPSlot index={5} />
-										</InputOTPGroup>
-									</InputOTP>
+									<InputOTP
+										maxLength={6}
+										{...field}
+										render={({ slots }) => (
+											<>
+												<InputOTPGroup>
+													{slots.slice(0, 3).map((slot, index) => (
+														// biome-ignore lint/suspicious/noArrayIndexKey: this is fine
+														<InputOTPSlot key={index} {...slot} />
+													))}{" "}
+												</InputOTPGroup>
+												<InputOTPSeparator />
+												<InputOTPGroup>
+													{slots.slice(3).map((slot, index) => (
+														// biome-ignore lint/suspicious/noArrayIndexKey: this is fine
+														<InputOTPSlot key={index} {...slot} />
+													))}
+												</InputOTPGroup>
+											</>
+										)}
+									/>
 								</FormControl>
 								<FormDescription>Enter your login code</FormDescription>
 								<FormMessage />

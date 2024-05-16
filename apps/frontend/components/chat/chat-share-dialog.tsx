@@ -1,9 +1,12 @@
 "use client";
 
-import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { toast } from "sonner";
 
+import { IconSpinner } from "@/components/ui/icons";
+import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
+import type { Chat, ServerActionResult } from "@/lib/types";
+import { Button } from "@hooper/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -11,11 +14,9 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@/components/ui/dialog";
-import { IconSpinner } from "@/components/ui/icons";
-import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
-import type { Chat, ServerActionResult } from "@/lib/types";
-import { Button } from "@hooper/ui/button";
+} from "@hooper/ui/dialog";
+
+type DialogProps = React.ComponentProps<typeof Dialog>;
 
 interface ChatShareDialogProps extends DialogProps {
 	chat: Pick<Chat, "id" | "title" | "messages">;

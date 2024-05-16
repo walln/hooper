@@ -1,15 +1,11 @@
 "use client";
 
 import { IconMessage, IconUsers } from "@/components/ui/icons";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import type { Chat } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@hooper/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@hooper/ui/tooltip";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

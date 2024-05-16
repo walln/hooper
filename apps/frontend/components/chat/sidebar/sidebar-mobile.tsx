@@ -2,8 +2,8 @@
 
 import { Sidebar } from "@/components/chat/sidebar/sidebar";
 import { IconSidebar } from "@/components/ui/icons";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@hooper/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@hooper/ui/sheet";
 
 interface SidebarMobileProps {
 	children: React.ReactNode;

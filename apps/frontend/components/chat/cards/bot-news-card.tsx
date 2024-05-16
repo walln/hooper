@@ -1,15 +1,15 @@
 "use client";
 
+import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
+import { cn } from "@/lib/utils";
+import type { NBANewsSchema } from "@hooper/core/espn";
 import {
 	ContextMenu,
 	ContextMenuContent,
 	ContextMenuItem,
 	ContextMenuTrigger,
-} from "@/components/ui/context-menu";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
-import { cn } from "@/lib/utils";
-import type { NBANewsSchema } from "@hooper/core/espn";
+} from "@hooper/ui/context-menu";
+import { ScrollArea, ScrollBar } from "@hooper/ui/scroll-area";
 import Image from "next/image";
 import React from "react";
 import { toast } from "sonner";
