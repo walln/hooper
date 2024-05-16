@@ -1,8 +1,6 @@
 import { readPackageJSON } from "pkg-types";
 import { defineConfig } from "tsup";
 
-import fs from "node:fs/promises";
-import path from "node:path";
 import { listDirectories } from "@hooper/utils/filesystem";
 
 const getPrimitives = async () => {
@@ -28,13 +26,6 @@ async function getEntries() {
 	];
 }
 
-// Function to write package.json
-async function writePackageJSON(pkg: unknown) {
-	const filePath = path.resolve(__dirname, "package.json");
-	const data = JSON.stringify(pkg, null, 2);
-	await fs.writeFile(filePath, data, "utf-8");
-}
-
 export default defineConfig(async (opts) => ({
 	entry: (await getEntries()).map((entry) => entry.source),
 	format: ["esm"],
@@ -44,9 +35,9 @@ export default defineConfig(async (opts) => ({
 	clean: !opts.watch,
 	dts: true,
 	outDir: "dist",
+	external: ["react", "react-dom"],
 	async onSuccess() {
 		const pkg = await readPackageJSON();
-
 		pkg.exports = {};
 
 		const entries = await getEntries();
@@ -69,6 +60,27 @@ export default defineConfig(async (opts) => ({
 			}
 		}
 
-		await writePackageJSON(pkg);
+		// entries.forEach((entry) => {
+		//   if (typeof pkg.exports === 'object') {
+		//     pkg.exports = {
+		//       ...pkg.exports,
+		//       [entry.export]: {
+		//         import: {
+		//           types: entry.source
+		//             .replace('src', 'dist')
+		//             .replace(/\.tsx?$/, '.d.ts'),
+		//           default: entry.source
+		//             .replace('src', 'dist')
+		//             .replace(/\.tsx?$/, '.js'),
+		//         },
+		//       },
+		//     } as Record<string, string | Record<string, string>>;
+		//   }
+		// });
+
+		// await formatAndWriteWithPrettier({
+		//   content: JSON.stringify(pkg, null, 2),
+		//   filePath: './package.json',
+		// });
 	},
 }));
