@@ -8,7 +8,8 @@ import { codeAdapter } from "./adapters/code";
 import { session } from "./session";
 
 const sessionExpiresIn = 30 * 24 * 60 * 60 * 1000;
-export const webUrl = process.env.WEB_URL ?? "http://localhost:3000";
+// biome-ignore lint/complexity/useLiteralKeys: type error
+export const webUrl = process.env["WEB_URL"] ?? "http://localhost:3000";
 
 const app = AuthHandler({
 	session: session,
@@ -17,7 +18,7 @@ const app = AuthHandler({
 	},
 	callbacks: {
 		auth: {
-			async error(error, req) {
+			async error(error, _req) {
 				// TODO: Redirect to error on signin page
 				return new Response("ok", {
 					status: 302,
@@ -26,20 +27,23 @@ const app = AuthHandler({
 					},
 				});
 			},
-			async allowClient(clientID, redirect, req) {
+			async allowClient(clientID, _redirect, _req) {
 				// TODO: Validate clientID and redirect better
 				if (clientID !== "web") return false;
 				return true;
 			},
-			async success(response, input, req) {
+			async success(response, input, _req) {
 				console.log("success", response, input);
 
 				const email = match(input.provider)
 					.with("code", () => {
-						const email = input.claims.email;
+						// biome-ignore lint/complexity/useLiteralKeys: type error
+						const email = input.claims["email"];
 						return email;
 					})
 					.exhaustive();
+
+				if (!email) throw new Error("Email not found");
 
 				// Check if user exists with that email
 				const user = await db
@@ -53,6 +57,8 @@ const app = AuthHandler({
 					// Create user
 					const id = nanoid();
 					const name = email.split("@")[0];
+					if (!name) throw new Error("Invalid email");
+
 					const rows = await db
 						.insert(users)
 						.values({ id, name, email })

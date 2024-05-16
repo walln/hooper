@@ -9,7 +9,7 @@ const CodeAdapterClaimsSchema = z.object({
 });
 
 export const codeAdapter = CodeAdapter({
-	async onCodeRequest(code, unvalidatedClaims, req) {
+	async onCodeRequest(code, unvalidatedClaims, _req) {
 		const claims = CodeAdapterClaimsSchema.parse(unvalidatedClaims);
 
 		// TODO: Check if OTP already exists for email
@@ -31,7 +31,7 @@ export const codeAdapter = CodeAdapter({
 			},
 		});
 	},
-	async onCodeInvalid(code, claims, req) {
+	async onCodeInvalid(_code, _claims, _req) {
 		return new Response("failed", {
 			status: 302,
 			headers: {
