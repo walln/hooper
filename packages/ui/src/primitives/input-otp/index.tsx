@@ -1,22 +1,21 @@
 "use client";
 
-import { DashIcon } from "@radix-ui/react-icons";
-import { OTPInput, OTPInputContext } from "input-otp";
 import * as React from "react";
 
-import { cn } from "@/lib/utils";
+import type { SlotProps } from "input-otp";
+
+import { DashIcon } from "@radix-ui/react-icons";
+import { OTPInput } from "input-otp";
+
+import { cn } from "@/utils/cn";
 
 const InputOTP = React.forwardRef<
 	React.ElementRef<typeof OTPInput>,
 	React.ComponentPropsWithoutRef<typeof OTPInput>
->(({ className, containerClassName, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
 	<OTPInput
 		ref={ref}
-		containerClassName={cn(
-			"flex items-center gap-2 has-[:disabled]:opacity-50",
-			containerClassName,
-		)}
-		className={cn("disabled:cursor-not-allowed", className)}
+		containerClassName={cn("flex items-center gap-2", className)}
 		{...props}
 	/>
 ));
@@ -32,11 +31,8 @@ InputOTPGroup.displayName = "InputOTPGroup";
 
 const InputOTPSlot = React.forwardRef<
 	React.ElementRef<"div">,
-	React.ComponentPropsWithoutRef<"div"> & { index: number }
->(({ index, className, ...props }, ref) => {
-	const inputOTPContext = React.useContext(OTPInputContext);
-	const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
-
+	SlotProps & React.ComponentPropsWithoutRef<"div">
+>(({ char, hasFakeCaret, isActive, className, ...props }, ref) => {
 	return (
 		<div
 			ref={ref}
@@ -50,7 +46,7 @@ const InputOTPSlot = React.forwardRef<
 			{char}
 			{hasFakeCaret && (
 				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-					<div className="h-4 w-px animate-caret-blink bg-foreground duration-1000" />
+					<div className="animate-caret-blink h-4 w-px bg-foreground duration-1000" />
 				</div>
 			)}
 		</div>
@@ -62,7 +58,7 @@ const InputOTPSeparator = React.forwardRef<
 	React.ElementRef<"div">,
 	React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
-	// biome-ignore lint/a11y/useAriaPropsForRole: no value needed
+	// biome-ignore lint/a11y/useAriaPropsForRole: not needed here
 	<div ref={ref} role="separator" {...props}>
 		<DashIcon />
 	</div>

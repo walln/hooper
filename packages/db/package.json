@@ -12,7 +12,7 @@
 	"scripts": {
 		"db:push": "drizzle-kit push:sqlite",
 		"db:studio": "drizzle-kit studio",
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --noEmit --tsBuildInfoFile .tsbuildinfo",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
