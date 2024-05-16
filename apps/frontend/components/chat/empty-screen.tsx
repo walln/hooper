@@ -8,13 +8,8 @@ export function EmptyScreen() {
 				<p className="leading-normal text-muted-foreground">
 					Hooper is an AI chatbot that knows all about what's happening in the{" "}
 					<ExternalLink href="https://www.nba.com">NBA</ExternalLink>. Ask it
-					Ask it anything about the NBA, and it will do its best to answer. This
-					is an open source AI chatbot app template built with{" "}
-					<ExternalLink href="https://nextjs.org">Next.js</ExternalLink>, the{" "}
-					<ExternalLink href="https://sdk.vercel.ai">
-						Vercel AI SDK
-					</ExternalLink>
-					, and custom LLMs trained to talk hoops.
+					Ask it anything about the NBA, and it will do its best to answer using
+					custom LLMs trained to talk hoops.
 				</p>
 				<p className="leading-normal text-muted-foreground">
 					Hooper has up to date information on the NBA, including player stats,

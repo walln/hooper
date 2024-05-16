@@ -168,13 +168,6 @@ Today's date is ${new Date().toLocaleDateString()}
 						history.done({
 							...history.get(),
 							messages: [
-								// ...history.get().messages,
-								// {
-								// 	id: nanoid(),
-								// 	role: "function",
-								// 	name: "getNews",
-								// 	content: "Failed to get news.",
-								// },
 								...history.get().messages,
 								{
 									id: nanoid(),
