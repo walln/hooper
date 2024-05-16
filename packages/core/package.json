@@ -10,7 +10,7 @@
 		"./espn": "./src/espn.ts"
 	},
 	"scripts": {
-		"typecheck": "tsc --noEmit",
+		"typecheck": "tsc --noEmit --tsBuildInfoFile .tsbuildinfo",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
