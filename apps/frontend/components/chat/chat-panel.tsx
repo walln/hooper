@@ -134,7 +134,7 @@ export function ChatPanel({
 					</div>
 				) : null}
 
-				<div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+				<div className="space-y-4 px-4 py-2 md:py-4">
 					{/* TODO: Check that if the chat has been shared that it cannot be edited */}
 					{!shared && <PromptForm input={input} setInput={setInput} />}
 					<FooterText className="hidden sm:block" />
