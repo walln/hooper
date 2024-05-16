@@ -1,0 +1,77 @@
+import { Canvas, Meta, Source } from '@storybook/blocks';
+
+import { RadixPrimitiveDocsButton } from '../../storybook-utils/primitive-docs-button';
+import * as ToastStories from './sonner.stories';
+
+<Meta of={ToastStories} />
+
+<RadixPrimitiveDocsButton name="sonner" />
+
+# Toast
+
+A succinct message that is displayed temporarily.
+
+## Preview
+
+<Canvas of={ToastStories.Default} />
+
+## Usage
+
+### Add `Toaster` component to your layout
+
+export const providerCode = `import { Toaster } from "@hooper/ui/sonner";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
+    </html>
+  );
+}`;
+
+<Source code={providerCode} language="tsx" dark />
+
+### Use `sonner` function from
+
+export const importCode = `import { toast } from "sonner";`;
+
+export const usageCode = `export const ToastDemo = () => {
+
+  return (
+    <Button
+      onClick={() => {
+        toast("Hello, world!");
+      }}
+    >
+      Show Toast
+    </Button>
+  );
+}
+`;
+
+<Source code={importCode} language="ts" dark />
+<Source code={usageCode} language="tsx" dark />
+
+## Examples
+
+### Simple
+
+<Canvas of={ToastStories.Simple} />
+
+### With Title
+
+<Canvas of={ToastStories.WithTitle} />
+
+### With Action
+
+<Canvas of={ToastStories.WithAction} />
+
+### Destructive
+
+Use `toast.error("Something went wrong!")` to display a destructive toast.
+
+<Canvas of={ToastStories.Destructive} />
