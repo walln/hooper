@@ -82,13 +82,6 @@ export const Simple: Story = {
 	},
 };
 
-export const WithTitle: Story = {
-	args: {
-		type: "info",
-		message: "There was a problem with your request.",
-	},
-};
-
 export const WithAction: Story = {
 	args: {
 		type: "action",
