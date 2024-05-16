@@ -1,6 +1,13 @@
 "use client";
 
 import { ChatShareDialog } from "@/components/chat/chat-share-dialog";
+import { IconShare, IconSpinner, IconTrash } from "@/components/ui/icons";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { Chat, ServerActionResult } from "@/lib/types";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -10,14 +17,7 @@ import {
 	AlertDialogFooter,
 	AlertDialogHeader,
 	AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { IconShare, IconSpinner, IconTrash } from "@/components/ui/icons";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
-import type { Chat, ServerActionResult } from "@/lib/types";
+} from "@hooper/ui/alert-dialog";
 import { Button } from "@hooper/ui/button";
 import { useRouter } from "next/navigation";
 import * as React from "react";

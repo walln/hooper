@@ -1,6 +1,8 @@
 import { readPackageJSON } from "pkg-types";
 import { defineConfig } from "tsup";
 
+import fs from "node:fs/promises";
+import path from "node:path";
 import { listDirectories } from "@hooper/utils/filesystem";
 
 const getPrimitives = async () => {
@@ -24,6 +26,13 @@ async function getEntries() {
 			export: "./cn",
 		},
 	];
+}
+
+// Function to write package.json
+async function writePackageJSON(pkg: unknown) {
+	const filePath = path.resolve(__dirname, "package.json");
+	const data = JSON.stringify(pkg, null, 2);
+	await fs.writeFile(filePath, data, "utf-8");
 }
 
 export default defineConfig(async (opts) => ({
@@ -59,5 +68,7 @@ export default defineConfig(async (opts) => ({
 				} as Record<string, string | Record<string, string>>;
 			}
 		}
+
+		await writePackageJSON(pkg);
 	},
 }));
