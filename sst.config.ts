@@ -70,8 +70,7 @@ export default $config({
 		});
 
 		return {
-			appUrl: web.url,
-			authUrl: auth.authenticator.url,
+			auth: auth.authenticator.url,
 			web: web.url,
 		};
 	},
