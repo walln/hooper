@@ -6,9 +6,35 @@
 	"sideEffects": false,
 	"type": "module",
 	"exports": {
+		"./alert-dialog": {
+			"import": {
+				"types": "./dist/primitives/alert-dialog/index.d.ts",
+				"default": "./dist/primitives/alert-dialog/index.js"
+			}
+		},
 		"./button": {
-			"types": "./dist/primitives/button/index.d.ts",
-			"default": "./dist/primitives/button/index.js"
+			"import": {
+				"types": "./dist/primitives/button/index.d.ts",
+				"default": "./dist/primitives/button/index.js"
+			}
+		},
+		"./input-otp": {
+			"import": {
+				"types": "./dist/primitives/input-otp/index.d.ts",
+				"default": "./dist/primitives/input-otp/index.js"
+			}
+		},
+		"./typography": {
+			"import": {
+				"types": "./dist/primitives/typography/index.d.ts",
+				"default": "./dist/primitives/typography/index.js"
+			}
+		},
+		"./cn": {
+			"import": {
+				"types": "./dist/utils/cn.d.ts",
+				"default": "./dist/utils/cn.js"
+			}
 		}
 	},
 	"files": ["dist"],

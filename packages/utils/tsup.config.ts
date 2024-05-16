@@ -9,5 +9,5 @@ export default defineConfig((opts) => ({
 	clean: !opts.watch,
 	dts: true,
 	outDir: "dist",
-	external: ["prettier"],
+	external: [],
 }));

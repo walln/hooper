@@ -19,7 +19,6 @@
 		"@hooper/auth": "workspace:*",
 		"@hooper/core": "workspace:*",
 		"@hooper/db": "workspace:*",
-		"@radix-ui/react-alert-dialog": "^1.0.5",
 		"@radix-ui/react-context-menu": "^2.1.5",
 		"@radix-ui/react-dialog": "^1.0.5",
 		"@radix-ui/react-dropdown-menu": "^2.0.6",

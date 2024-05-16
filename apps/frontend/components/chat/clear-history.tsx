@@ -3,6 +3,8 @@
 import * as React from "react";
 import { toast } from "sonner";
 
+import { IconSpinner } from "@/components/ui/icons";
+import type { ServerActionResult } from "@/lib/types";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -13,9 +15,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 	AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { IconSpinner } from "@/components/ui/icons";
-import type { ServerActionResult } from "@/lib/types";
+} from "@hooper/ui/alert-dialog";
 import { Button } from "@hooper/ui/button";
 
 interface ClearHistoryProps {
