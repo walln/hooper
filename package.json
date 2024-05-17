@@ -29,6 +29,7 @@
 		"lint": "turbo lint",
 		"lint:fix": "turbo lint:fix",
 		"dev": "sst dev --silent 'turbo dev --filter=@hooper/frontend'",
+		"build": "sst dev --silent 'turbo build --filter=@hooper/frontend'",
 		"storybook:dev": "turbo storybook",
 		"clean": "rimraf --glob **/node_modules **/dist **/.turbo **/storybook-static **/.tsbuildinfo **/.next **/.open-next"
 	},
