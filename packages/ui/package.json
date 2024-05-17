@@ -122,8 +122,8 @@
 		"lint:fix": "biome lint --apply .",
 		"format": "biome format .",
 		"format:fix": "biome format --write . ",
-		"build": "tsup",
-		"dev": "tsup --watch",
+		"build": "NODE_OPTIONS='--max-old-space-size=16384' tsup",
+		"dev": "NODE_OPTIONS='--max-old-space-size=16384' tsup --watch",
 		"storybook": "storybook dev -p 6006 --no-open",
 		"build-storybook": "storybook build",
 		"test-storybook": "test-storybook"
