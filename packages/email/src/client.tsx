@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Resend } from "resend";
 import { AuthenticationCodeEmail } from "../emails/auth-code";
 

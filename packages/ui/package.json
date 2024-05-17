@@ -157,6 +157,7 @@
 		"@hooper/tsconfig": "workspace:*",
 		"@hooper/utils": "workspace:*",
 		"@hooper/vite": "workspace:*",
+		"@radix-ui/react-dropdown-menu": "^2.0.6",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@storybook/addon-a11y": "^8.0.10",
 		"@storybook/addon-essentials": "^8.0.10",
