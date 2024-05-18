@@ -38,24 +38,24 @@ export function ChatPanel({
 
 	const exampleMessages = [
 		{
+			heading: "What games are",
+			subheading: "hapenning today?",
+			message: "What games are happening today?",
+		},
+		{
+			heading: "What are the top",
+			subheading: "headlines around the NBA?",
+			message: "What are the top headlines around the NBA?",
+		},
+		{
 			heading: "Who is leading the league",
 			subheading: "in points per game?",
 			message: "Who is leading the league in points per game?",
 		},
 		{
-			heading: "What team has",
-			subheading: "the best record in the east?",
-			message: "What team has the best record in the east?",
-		},
-		{
 			heading: "Who is most likely",
 			subheading: "to win the MVP?",
 			message: "Who is most likely to win the MVP?",
-		},
-		{
-			heading: "What games are",
-			subheading: "hapenning today?",
-			message: "What games are happening today?",
 		},
 	];
 
