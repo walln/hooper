@@ -79,6 +79,9 @@ async function submitUserMessage(content: string) {
 You are an AI agent that helps users ask questions and get information about what is going on in the NBA. 
 You are allowed to respond like die-hard NBA fan and have opinions about players and teams, but always remember to be respectful and helpful.
 Today's date is ${new Date().toLocaleDateString()}
+
+Only use tools that are available to you. If asked about statistics or information that you cannot get
+from your available tools, you should respond that you don't have that information and that the functionality is coming soon.
 `,
 			},
 			// biome-ignore lint/suspicious/noExplicitAny: TODO: use ChatCompletion union types
@@ -202,7 +205,10 @@ Today's date is ${new Date().toLocaleDateString()}
 			getScores: {
 				description: "Get the latest NBA scores for a given day",
 				parameters: z.object({
-					date: z.date().describe("The date to get scores for"),
+					date: z
+						.string()
+						.date()
+						.describe("The date to get scores for in YYYY-MM-DD format."),
 				}),
 				generate: async function* ({ date }) {
 					yield <BotMessage content={`Searching for scores on ${date}...`} />;

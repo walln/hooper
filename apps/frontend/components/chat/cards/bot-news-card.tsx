@@ -46,7 +46,7 @@ function NewsArticle({
 	return (
 		<a
 			href={article.links.web.href}
-			className="block hover:bg-muted/40 transition-all"
+			className="block hover:bg-muted transition-all rounded-md"
 		>
 			<div className={cn("space-y-3 p-2", className)} {...props}>
 				<ContextMenu>
@@ -89,7 +89,7 @@ function NewsArticle({
 
 export function News({ news }: { news: News }) {
 	return (
-		<ScrollArea>
+		<ScrollArea className="overflow-hidden max-w-xl">
 			<div className="flex space-x-1 pb-4">
 				{news.articles.map((article) => (
 					<NewsArticle

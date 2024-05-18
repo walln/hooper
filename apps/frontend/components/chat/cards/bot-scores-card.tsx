@@ -11,11 +11,11 @@ type ScoresResponse = z.infer<typeof NBAScoresSchema>;
 export function ScoresSkeleton() {
 	return (
 		<ScrollArea>
-			<div className="flex flex-col space-x-1 pb-4">
-				{[...Array(10)].map((val, _) => (
+			<div className="flex flex-col pb-4 h-1/2 space-y-2">
+				{[...Array(3)].map((val, _) => (
 					<div
 						key={val}
-						className="w-[150px] h-[150px] bg-gray-300 animate-pulse"
+						className="w-full h-[100px] bg-gray-300 animate-pulse rounded-md"
 					/>
 				))}
 			</div>
@@ -37,6 +37,7 @@ function TeamLogo({
 				"h-auto w-auto object-cover transition-all hover:scale-105",
 				aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square",
 			)}
+			loading="eager"
 		/>
 	);
 }
@@ -73,7 +74,7 @@ function ScoreCard({
 	}
 
 	return (
-		<div className="flex justify-center w-full space-x-4 hover:bg-muted transition-all py-6">
+		<div className="flex justify-center w-full space-x-4 hover:bg-muted transition-all py-6 items-center h-[80px]">
 			<TeamCard team={homeTeam} />
 			<div>vs</div>
 			<TeamCard team={awayTeam} />
@@ -83,8 +84,8 @@ function ScoreCard({
 
 export function Scores({ scores }: { scores: ScoresResponse }) {
 	return (
-		<ScrollArea className="max-h-1/2 items-center justify-center bg-background">
-			<div className="flex flex-col items-center justify-center border h-full">
+		<ScrollArea className="max-h-1/2 items-center justify-center bg-background rounded-md">
+			<div className="flex flex-col items-center justify-center border h-full rounded-md">
 				{scores.events.map(
 					(event) =>
 						event.competitions[0] && (
