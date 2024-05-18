@@ -219,8 +219,11 @@ from your available tools, you should respond that you don't have that informati
 					const toolCallId = nanoid();
 
 					try {
-						console.log("Getting scores for", new Date(date));
-						const response = await getNbaScores(new Date(date));
+						const formattedDate = new Date(date).toLocaleDateString("en-US", {
+							timeZone: "America/New_York",
+						});
+						console.log("Getting scores for", formattedDate);
+						const response = await getNbaScores(new Date(formattedDate));
 						history.done({
 							...history.get(),
 							messages: [
