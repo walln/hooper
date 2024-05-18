@@ -34,7 +34,7 @@ function TeamLogo({
 			width={50}
 			height={50}
 			className={cn(
-				"h-auto w-auto object-cover transition-all hover:scale-105",
+				"h-auto w-auto object-cover transition-all hover:scale-105 md:scale-100 scale-50",
 				aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square",
 			)}
 			loading="eager"
@@ -49,7 +49,7 @@ function TeamCard({
 	aspectRatio?: "portrait" | "square";
 }) {
 	return (
-		<div className="flex flex-row">
+		<div className="flex flex-col md:flex-row">
 			{team.homeAway === "away" && <TeamLogo logo={team.team.logo} />}
 			<div className="space-y-1 text-sm flex flex-col items-center justify-center w-48">
 				<h3 className="font-medium leading-none">{team.team.displayName}</h3>
@@ -74,7 +74,7 @@ function ScoreCard({
 	}
 
 	return (
-		<div className="flex justify-center w-full space-x-4 hover:bg-muted transition-all py-6 items-center h-[80px]">
+		<div className="flex flex-col sm:flex-row justify-center w-full space-x-4 hover:bg-muted transition-all py-6 items-center sm:h-[80px]">
 			<TeamCard team={homeTeam} />
 			<div>vs</div>
 			<TeamCard team={awayTeam} />
