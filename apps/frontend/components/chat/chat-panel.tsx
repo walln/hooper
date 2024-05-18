@@ -38,9 +38,9 @@ export function ChatPanel({
 
 	const exampleMessages = [
 		{
-			heading: "What games are",
-			subheading: "hapenning today?",
-			message: "What games are happening today?",
+			heading: "What are the",
+			subheading: "scores for today's games?",
+			message: "What are the scores for today's games?",
 		},
 		{
 			heading: "What are the top",
