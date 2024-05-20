@@ -2,24 +2,11 @@ import { auth } from "@hooper/auth/next-client";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { headers } from "next/headers";
-
-function getEnv() {
-	// biome-ignore lint/complexity/useLiteralKeys: type error
-	const token = process.env["REDIS_TOKEN"];
-	// biome-ignore lint/complexity/useLiteralKeys: type error
-	const endpoint = process.env["REDIS_ENDPOINT"];
-
-	if (!token || !endpoint) {
-		console.log(process.env);
-		throw new Error("Missing REDIS_TOKEN or REDIS_ENDPOINT");
-	}
-
-	return { token, endpoint };
-}
+import { Resource } from "sst";
 
 const redis = new Redis({
-	url: getEnv().endpoint,
-	token: getEnv().token,
+	url: Resource.Redis.endpoint,
+	token: Resource.Redis.token,
 });
 
 const ratelimit = {

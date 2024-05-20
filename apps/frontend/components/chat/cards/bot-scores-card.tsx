@@ -60,6 +60,7 @@ function TeamCard({
 	);
 }
 
+// TODO: handle no games on the day
 function ScoreCard({
 	competition,
 }: { competition: ScoresResponse["events"][number]["competitions"][number] }) {

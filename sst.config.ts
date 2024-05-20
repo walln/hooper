@@ -40,6 +40,15 @@ export default $config({
 			},
 		});
 
+		$linkable(upstash.RedisDatabase, function () {
+			return {
+				properties: {
+					endpoint: this.endpoint,
+					token: this.restToken,
+				},
+			};
+		});
+
 		const redis = new upstash.RedisDatabase("Redis", {
 			region: "us-east-1",
 			databaseName: $interpolate`hooper-${$app.stage}-redis`,
@@ -52,8 +61,6 @@ export default $config({
 				dns: dns,
 			},
 			environment: {
-				REDIS_ENDPOINT: redis.endpoint,
-				REDIS_TOKEN: redis.restToken,
 				AUTH_URL: auth.authenticator.url,
 				WEB_URL: $dev
 					? "http://localhost:3000"
@@ -62,6 +69,7 @@ export default $config({
 			link: [
 				auth,
 				auth.authenticator,
+				redis,
 				TURSO_URL,
 				TURSO_TOKEN,
 				OPENAI_API_KEY,

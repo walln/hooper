@@ -16,6 +16,11 @@ declare module "sst" {
       type: "sst.sst.Secret"
       value: string
     }
+    Redis: {
+      endpoint: string
+      token: string
+      type: "upstash.index/redisDatabase.RedisDatabase"
+    }
     ResendApiKey: {
       type: "sst.sst.Secret"
       value: string

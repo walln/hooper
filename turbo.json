@@ -14,7 +14,13 @@
 		},
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": [".next/**", "!.next/cache/**", "dist/**", ".astro/**"]
+			"outputs": [
+				".next/**",
+				"!.next/cache/**",
+				"dist/**",
+				".astro/**",
+				".open-next/**"
+			]
 		},
 		"dev": {
 			"dependsOn": ["^build"],
